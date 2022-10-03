@@ -1,0 +1,804 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>4.1. Turbo-codes parallèles &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.2. Turbo-codes série" href="ch4sec2.html" />
+    <link rel="prev" title="4. Concaténation de codes en treillis : Turbo-codes" href="ch4intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fch4sec1.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch4sec1.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structure-du-codeur">
+   4.1.1. Structure du codeur
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#codage-de-l-information">
+     4.1.1.1. Codage de l’information
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fermeture-de-treillis">
+     4.1.1.2. Fermeture de treillis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entrelaceur">
+     4.1.1.3. Entrelaceur
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decodage-iteratif-des-turbo-codes">
+   4.1.2. Décodage itératif des turbo-codes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#notion-d-information-extrinseque">
+     4.1.2.1. Notion d’Information Extrinsèque
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decodage-iteratif-map">
+     4.1.2.2. Décodage itératif MAP
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Turbo-codes parallèles</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structure-du-codeur">
+   4.1.1. Structure du codeur
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#codage-de-l-information">
+     4.1.1.1. Codage de l’information
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fermeture-de-treillis">
+     4.1.1.2. Fermeture de treillis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entrelaceur">
+     4.1.1.3. Entrelaceur
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#decodage-iteratif-des-turbo-codes">
+   4.1.2. Décodage itératif des turbo-codes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#notion-d-information-extrinseque">
+     4.1.2.1. Notion d’Information Extrinsèque
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#decodage-iteratif-map">
+     4.1.2.2. Décodage itératif MAP
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="turbo-codes-paralleles">
+<h1><span class="section-number">4.1. </span>Turbo-codes parallèles<a class="headerlink" href="#turbo-codes-paralleles" title="Permalink to this headline">#</a></h1>
+<p>On présente ici la concaténation parallèle de codes convolutifs introduite par Claude Berrou en 1993.</p>
+<section id="structure-du-codeur">
+<h2><span class="section-number">4.1.1. </span>Structure du codeur<a class="headerlink" href="#structure-du-codeur" title="Permalink to this headline">#</a></h2>
+<figure class="align-default" id="turbo-codes-fig">
+<img alt="_images/turbo.png" src="_images/turbo.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4.1 </span><span class="caption-text">Structure d’un turbo-code parallèle avec deux codeurs.</span><a class="headerlink" href="#turbo-codes-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="codage-de-l-information">
+<h3><span class="section-number">4.1.1.1. </span>Codage de l’information<a class="headerlink" href="#codage-de-l-information" title="Permalink to this headline">#</a></h3>
+<p>La structure d’un turbo-code parallèle avec des codes composants de rendement <span class="math notranslate nohighlight">\(R_0=1/2\)</span> est donnée figure <a class="reference internal" href="#turbo-codes-fig"><span class="std std-numref">Fig. 4.1</span></a>. La structure du codeur est une structure de codage par bloc. ELle se généralise à plusieurs codeurs avec des
+propriétés qui peuvent être différentes. Pour la simplicité d’exposition, on se contentera dans ce texte du cas de deux codeurs
+identiques ayant les mêmes caractéristiques. La procédure est donnée comme suit</p>
+<ol class="simple">
+<li><p><span class="math notranslate nohighlight">\(K\)</span> bits d’information sont codés avec le codeur convolutif récursif systématqiue RSC1,</p></li>
+<li><p>Les mêmes <span class="math notranslate nohighlight">\(K\)</span> bits d’information sont en parallèle entrelacés et codés par le codeur convolutif récursif RSC2,</p></li>
+<li><p>Comme la sortie systèmatique du code RSC1 est déjà disponible, seule la partie redondance est prise en compte sur le codeur RSC2.</p></li>
+</ol>
+<p>En pratique les deux codes sont souvent identiques, cependant rien n’empêche de considérer des codes composants différents et de rendments
+différents. La seule contrainte originelle est qu’ils partagent la même information. En partant d’un code de rendement <span class="math notranslate nohighlight">\(R_0=1/2\)</span>, on obtient
+donc un code de rendement <span class="math notranslate nohighlight">\(R'_0=1/3\)</span>. Le code est par construction systématique. On peut faire varier le rendement en définissant comem
+pour les codes convolutifs des masques périodiques de poinçonnage. On est donc pas limité au seul rendment <span class="math notranslate nohighlight">\(1/3\)</span>. En générale si on considère
+un code dont les composants sont de rendements <span class="math notranslate nohighlight">\(R_1\)</span> et <span class="math notranslate nohighlight">\(R_2\)</span> le rendement golbale du code est donnée par</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{R}=\frac{1}{R_1}+\frac{1}{R_2}\]</div>
+<p>Ainsi, on peut atteindre différents rendements par changement des codes composants. On peut également employé la technique de poinçonnage comme
+utilisée avec les codes convolutifs. Par exemple, on peut envoyer, sur deux périodes d’horloge, chaque bit systématique et poinçonnés
+alternativement chaque bits de parité ce qui donne la matrice de poinçonnage de période <span class="math notranslate nohighlight">\(2\)</span> suivante</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{\bf P}=\begin{pmatrix}
+1 &amp;1 \\
+1 &amp; 0 \\
+0 &amp; 1
+\end{pmatrix}\end{split}\]</div>
+<p>Le code résultant est un code de rendement <span class="math notranslate nohighlight">\(R=1/2\)</span>.</p>
+</section>
+<section id="fermeture-de-treillis">
+<h3><span class="section-number">4.1.1.2. </span>Fermeture de treillis<a class="headerlink" href="#fermeture-de-treillis" title="Permalink to this headline">#</a></h3>
+<p>Généralement, un turbo-code est utilisé pour réalisé un codage de type bloc. Dans ce cadre Une terminaison de treillis est souvent réalisée.
+Cependant la fermeture de treillis ne se réalise pas par un simple ajout de bits <span class="math notranslate nohighlight">\('0'\)</span> pour amener le codeur dans l’état de registre
+“tout-à-zéro”. Dans le cadre de codes convolutifs récursifs, les <span class="math notranslate nohighlight">\(\nu\)</span> bits à considérer dépendent de l’état du registre près que les <span class="math notranslate nohighlight">\(K\)</span>
+premiers bits aient été codés. Dans ce cas, la connaissance de cet état permet de déterminer la suite de bits à utiliser. On peut considérer
+soit une table associée ou de manière plus efficcae de considérer la méthode de Divsalar. Celle-ci consiste en la méthode décrite figure
+<span class="xref myst">5.0.1</span>{reference-type=”ref” reference=””}. A près <span class="math notranslate nohighlight">\(K\)</span> bits d’information, l’entrée du codeur est alors rebouclée sur le retour du
+code récursif qui donne alors la sortie systématique et à pour effet de conduire le codeur à l’état “tout-à-zéro”. La présence de
+l’entrelaceur prévient toute fermeture conjointe des deux codeurs avec un nombre de bits raisonnable pour un entrelaceur quelconque. Ainsi, on
+ne considère donc en générale que la fermeture du premier code composant, le second n’étant pas terminé. On verra par la suite comment
+gérer dans le décodage cette asymmétrie.</p>
+</section>
+<section id="entrelaceur">
+<h3><span class="section-number">4.1.1.3. </span>Entrelaceur<a class="headerlink" href="#entrelaceur" title="Permalink to this headline">#</a></h3>
+<p>Théoriquement L’entrelaceur utilisée dans le codage de type turbo est un entrelaceur en bloc pseudo-aléatoire défini comme une permutation de <span class="math notranslate nohighlight">\(K\)</span> éléments
+(les <span class="math notranslate nohighlight">\(K\)</span> bits d’information) sans répétition. Un des rôles principaux est de pouvoir décorréler les entrées souples des décodeurs souples associés. Nous verrons par la suite comment sont réalisés ces entrelaceurs.</p>
+</section>
+</section>
+<section id="decodage-iteratif-des-turbo-codes">
+<h2><span class="section-number">4.1.2. </span>Décodage itératif des turbo-codes<a class="headerlink" href="#decodage-iteratif-des-turbo-codes" title="Permalink to this headline">#</a></h2>
+<p>Du schéma du codeur, on voit clairement que l’on peut décoder les deux codes constituants de manière indépendantes car on a accès pour les deux
+codes aux bits systématiques et codés. Cependant, cette stratégie est sous optimale car les bits d’information traités par les deux codeurs ne
+sont pas indépendants. En effet, les deux codeurs partagent la même information et on peut alors se poser la question d’un décodage conjoint
+des deux codes convolutifs. Le fait d’avoir un entrelaceur implique une complexité exponentielle du décodage conjoint si l’on voulait considérer
+un treillis conjoint. L’idée proposée par C. Berrou est de décoder séparément les deux codes constituants. Chaque codeur pourra être à même
+de renseigner l’autre codeur d’une probabilité a priori pour les bits d’information qu’ils ont en commun, a priori qui pourra alors être mis à
+profis pour une nouvelle tentative de décodage. On peut alors envisager une sorte de décodage successif collaboratif des deux décodeurs. La
+difficulté est d’assurer que l’information échangée est suffisament décoréllée entre les deux décodeurs. Pour cela nous avons besoin de
+définir une quantité appelée <em>information extinsèque</em> qui est une quantité qui est liée au gain statistique apporté par le décodeur sur le
+décodage souple d’un bit hormis la vraisemblance et l’a priori disponible.</p>
+<section id="notion-d-information-extrinseque">
+<h3><span class="section-number">4.1.2.1. </span>Notion d’Information Extrinsèque<a class="headerlink" href="#notion-d-information-extrinseque" title="Permalink to this headline">#</a></h3>
+<p>On se contentera ici du cas d’un codeur récursif systématique de
+rendement <span class="math notranslate nohighlight">\(R=1/n_c\)</span>, pour simplifier les notations. On supposera
+également que <span class="math notranslate nohighlight">\(c^{(1)}_n=u_n\)</span>, ie. le premier bit codé par le codeur
+RSC1 est le bit systématique. On peut alors à partir du décodage MAP
+symbole mettre en exergue l’information dîte extinsèque:</p>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 4.1 </span> (Information extrinsèque)</p>
+<section class="definition-content" id="proof-content">
+<p>Pour un codeur RSC, le LLR associé à un décodage de type MAP peut être décomposé de la manière suivante:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\textstyle L(u_n)&amp;\textstyle =&amp;\textstyle \log{\left[\frac{ \sum_{\mathcal{S}^{+}}{p(s_{n-1}=s', s_{n}=s, { \bf y})}}{\sum_{\mathcal{S}^{-}}{p(s_{n-1}=s', s_{n}=s, { \bf y})}}\right]} \\
+\textstyle &amp; \textstyle =&amp; \textstyle {\bf  L_c(u_n)} + {\bf L_{a}(u_n)} + {\bf L_{ext}(u_n)}
+\end{aligned}\end{split}\]</div>
+<p>avec</p>
+<ol>
+<li><p><strong>Information canal (Vraisemblance) :</strong></p>
+<div class="math notranslate nohighlight">
+\[L_c(u_n) = \log{(\frac{p(y^{(1)}_n|u_n=+1)}{p(y^{(1)}_n|u_n=-1)})}\]</div>
+</li>
+<li><p><strong>Information a priori :</strong></p>
+<div class="math notranslate nohighlight">
+\[L_{a}(u_n) = \log{(\frac{p(u_n=+1)}{p(u_n=-1)})}\]</div>
+</li>
+<li><p><strong>Information extrinsèque :</strong> $<span class="math notranslate nohighlight">\(\begin{aligned}
+\textstyle L_{ext}(u_n)&amp;\textstyle =&amp; \textstyle \log{\left[\frac{ \sum_{\mathcal{S}^{+}}{\alpha_{n-1}(s') \prod_{k=2}^{n_c}{p(y^{(k)}_n|c^{(k)}_n(s',s))} \beta_{n}(s)}}{\sum_{\mathcal{S}^{-}}{\alpha_{n-1}(s') \prod_{l=2}^{n_c}{p(y^{(l)}_n|c^{(l)}_n(s',s))} \beta_{n}(s)}}\right]} \nonumber \\
+\textstyle &amp; \textstyle =&amp; \textstyle \log{\left[\frac{ \sum_{\mathcal{S}^{+}}{\alpha_{n-1}(s') \gamma_n^{e}(s',s) \beta_{n}(s)}}{\sum_{\mathcal{S}^{-}}{\alpha_{n-1}(s') \gamma_n^{e}(s',s) \beta_{n}(s)}}\right]}
+\end{aligned}\)</span>$</p></li>
+</ol>
+</section>
+</div><p>On peut alors faire l’interprétation suivante. En non codée, nous aurions</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+ L(u_n)&amp;=&amp;  {\bf  L_c(u_n)} + {\bf L_{a}(u_n)} \nonumber \\
+&amp;=&amp; \log{(\frac{p(y^{(1)}_n|u_n=+1)}{p(y^{(1)}_n|u_n=-1)})} + \log{(\frac{p(u_n=+1)}{p(u_n=-1)})}. 
+\end{aligned}\end{split}\]</div>
+<p>Ce qui correspond à la statistique de test classique de
+la détection d’une variable binaire en fonction de sa vraisemblance et
+de l’a priori disponible. Pour le cas codé, la quantité <span class="math notranslate nohighlight">\(L_{ext}(u_n)\)</span>
+représente un terme supplémentaire, qui est lié au code et au processus
+de décodage. Elle est extrinsèque car ne dépend pas de l’observations
+directe du bit ni de son apriori, mais de toutes les autres données.
+C’est cette quantité qui après décodage MAP par l’agorithme BCJR permet
+d’avoir un gain par rapport au cas non codé. C’est cette quantité qui
+sera utilisé à la sortie d’un des deux décodeurs comme a priori pour
+l’autre décodeur.</p>
+<p>Le décodage MAP d’un code convolutif peut donc se représenter par un
+bloc de décodage à entrées et sorties souples (bloc SISO). Le schéma
+bloc est donné ci-après.</p>
+</section>
+<section id="decodage-iteratif-map">
+<h3><span class="section-number">4.1.2.2. </span>Décodage itératif MAP<a class="headerlink" href="#decodage-iteratif-map" title="Permalink to this headline">#</a></h3>
+<figure class="align-default" id="turbo-decoder-fig">
+<img alt="_images/decodeurturbo.png" src="_images/decodeurturbo.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 4.2 </span><span class="caption-text">Structure du décodeur itératif pour la concaténation parallèle</span><a class="headerlink" href="#turbo-decoder-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Le schéma en figure <a class="reference internal" href="#turbo-decoder-fig"><span class="std std-numref">Fig. 4.2</span></a>  donne la structure du décodeur itératif
+turbo. Le principe sous-jacent est le décodage distribué des deux codes
+composants qui vont avoir un décodage alterné. Les décodeurs MAP des
+deux codes constituants vont alors pouvoir s’échanger une information
+<em>extrinsèque</em> relative aux bits d’information communs de manière
+itérative. L’information extrinsèque sur chaque bit en sortie de chaque
+codeur est alors considérée par l’autre décodeur comme un a priori après
+entrelacement/désentrelacement, l’entrelacement favorisant la
+décorrélation de ces quantités. Le décodage s’effectue comme suit. Un
+premier décodage MAP est effectué sur le premier code RSC1 pour lequel
+on ne considère pas d’apriori (ie. <span class="math notranslate nohighlight">\(L_{a,0}(u[n])=0, \forall n\)</span>).
+L’information extrinsèque du premier codeur est alors calculée comme</p>
+<div class="math notranslate nohighlight">
+\[L_{\mathrm{ext},1}^1(u[n])=L_{1}^1(u[n])-L_c(u[n])-L_{a,0}^1(u[n])\]</div>
+<p>Le décodage MAP complet est alors donné par la procédure générique
+suivante:</p>
+<ul>
+<li><p>Critères MAP au deux décodeurs à l’itération <span class="math notranslate nohighlight">\((\ell)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+    L_{\tiny RSC_1}^{(\ell)}(u_n)&amp;=&amp;\frac{2}{\sigma^2} y_n^{(1)} + L_{a,1}^{(\ell - 1)}(u_n) + L_{e,1}^{(\ell)}(u_n) \nonumber \\
+    &amp;=&amp;\frac{2}{\sigma^2} y_n^{(1)} + L_{e,2}^{(\ell -1)}(u_{\pi^{-1}(n)}) + L_{e,1}^{(\ell)}(u_n)
+    \end{aligned}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+    L_{\tiny RSC_2}^{(\ell)}(u_{\pi(n)})&amp;=&amp;\frac{2}{\sigma^2} \pi(y_{\pi(n)}^{(1)}) + L_{e,1}^{(\ell -1)}(u_{\pi(n)}) + L_{e,2}^{(\ell)}(u_{\pi(n)}) \nonumber \\
+    \end{aligned}\end{split}\]</div>
+<p>avec <span class="math notranslate nohighlight">\(\pi(.)\)</span> et <span class="math notranslate nohighlight">\(\pi^{-1}\)</span> représentent les opérations d’entrelacement et de désentrelacement</p>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch4intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">4. </span>Concaténation de codes en treillis : Turbo-codes</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ch4sec2.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4.2. </span>Turbo-codes série</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,815 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.3. Mesure de l’information : notion d’entropie &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.4. Information mutuelle" href="ch1sec2.html" />
+    <link rel="prev" title="1. Introduction à la théorie de l’information" href="ch1intro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fch1sec1.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch1sec1.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#information-propre">
+   1.3.1. Information propre
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-associee-a-une-variable-aleatoire-discrete">
+   1.3.2. Entropie associée à une variable aléatoire discrète
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-conjointe-et-conditionnelle">
+   1.3.3. Entropie conjointe et conditionnelle
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-s-associee-s-a-une-variable-aleatoire-continue">
+   1.3.4. Entropie(s) associée(s) à une variable aléatoire continue
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Mesure de l’information : notion d’entropie</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#information-propre">
+   1.3.1. Information propre
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-associee-a-une-variable-aleatoire-discrete">
+   1.3.2. Entropie associée à une variable aléatoire discrète
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-conjointe-et-conditionnelle">
+   1.3.3. Entropie conjointe et conditionnelle
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#entropie-s-associee-s-a-une-variable-aleatoire-continue">
+   1.3.4. Entropie(s) associée(s) à une variable aléatoire continue
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="mesure-de-l-information-notion-d-entropie">
+<h1><span class="section-number">1.3. </span>Mesure de l’information : notion d’entropie<a class="headerlink" href="#mesure-de-l-information-notion-d-entropie" title="Permalink to this headline">#</a></h1>
+<section id="information-propre">
+<h2><span class="section-number">1.3.1. </span>Information propre<a class="headerlink" href="#information-propre" title="Permalink to this headline">#</a></h2>
+<p>Soit <span class="math notranslate nohighlight">\(X\)</span> une variable aléatoire discrète et <span class="math notranslate nohighlight">\(X=x\)</span> un événement de
+probabilité <span class="math notranslate nohighlight">\(p(x)\)</span>, une mesure de l’information, notons-là <span class="math notranslate nohighlight">\(h(x),\)</span>
+s’identifie à une mesure de l’inattendu, de l’improbable. Ainsi, une
+information apportée par la réalisation de l’événement <span class="math notranslate nohighlight">\(X\)</span> sera d’autant
+plus importante que celle-ci est peu probable, ie.</p>
+<div class="math notranslate nohighlight">
+\[h(x)=f\left(\frac{1}{p(x)}\right).\]</div>
+<p>Concernant la notion d’information, les propriétés attendues sont:</p>
+<ol class="simple">
+<li><p><span class="math notranslate nohighlight">\(f(.)\)</span> est une fonctionnelle croissante de <span class="math notranslate nohighlight">\(p(x),\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f(p)=0\)</span> quand <span class="math notranslate nohighlight">\(p \rightarrow 1\)</span> (événement certain)</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(p \cdot q)=f(p)+f(q)\)</span> (additivité de l’information pour des
+événements indépendants <span class="math notranslate nohighlight">\(: h(x\)</span> et <span class="math notranslate nohighlight">\(y)=h(x)+h(y)).\)</span></p></li>
+</ol>
+<p>Compte tenu de cette axiomatique, la fonction <span class="math notranslate nohighlight">\(f(p)=-\log (p)\)</span> est la seule fonction qui soit à la fois positive, continue sur <span class="math notranslate nohighlight">\([0,1)\)</span> et qui vérifie l’additivité des informations indépendantes. La base du logarithme est elle indifférente.</p>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 1.2 </span> (Information propre)</p>
+<section class="definition-content" id="proof-content">
+<p>Soit <span class="math notranslate nohighlight">\(X\)</span> une variable aléatoire discrète et <span class="math notranslate nohighlight">\(X=x\)</span> un événement de probabilité <span class="math notranslate nohighlight">\(p(x)\)</span>, on appelle information propre ou quantité
+d’information apportée par l’événement <span class="math notranslate nohighlight">\(x\)</span>, la quantité</p>
+<div class="math notranslate nohighlight">
+\[h(x)=\log \left(\frac{1}{p(x)}\right)=-\log (p(x))\]</div>
+</section>
+</div><div class="proof property admonition" id="property-1">
+<p class="admonition-title"><span class="caption-number">Property 1.1 </span></p>
+<section class="property-content" id="proof-content">
+<ol>
+<li><p>positivité :</p>
+<div class="math notranslate nohighlight">
+\[ h(x) \geq 0\]</div>
+</li>
+<li><p>additivité : soient <span class="math notranslate nohighlight">\(x\)</span> et <span class="math notranslate nohighlight">\(y\)</span> deux événements indépendants, alors</p>
+<div class="math notranslate nohighlight">
+\[h(x \text { et } y)=h(x)+h(y)\]</div>
+</li>
+</ol>
+</section>
+</div><p>Quand le la base du logarithme est la base naturel <span class="math notranslate nohighlight">\((\log_e(.))\)</span>, on parle de Shannon (Sh.) ou d’unité naturelle, notée <em>nats</em> pour <em>natural units</em>. Si on utilise un logarithm en base <span class="math notranslate nohighlight">\(2\)</span> <span class="math notranslate nohighlight">\((\log_2(.)),\)</span> on parle d’unité binaire, notée <em>bits</em> pour <em>binary units</em>. Ainsi, pour une source binaire à valeur dans <span class="math notranslate nohighlight">\(\{0,1\}\)</span> equi-distribuée de symbolesindépendants, l’information propre associée à chaque symbole binaire est <span class="math notranslate nohighlight">\(h(1 / 2)=1\)</span> bits. Pour une source <span class="math notranslate nohighlight">\(M\)</span> -aire à valeur dans <span class="math notranslate nohighlight">\(\{0,1 \cdots, M-1\}\)</span> equidistribuée de symboles indépendants, l’information propre associée à chaque symbole est <span class="math notranslate nohighlight">\(h(1 / M)=\log _{2}(M)\)</span> bits.</p>
+</section>
+<section id="entropie-associee-a-une-variable-aleatoire-discrete">
+<h2><span class="section-number">1.3.2. </span>Entropie associée à une variable aléatoire discrète<a class="headerlink" href="#entropie-associee-a-une-variable-aleatoire-discrete" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="definition-2">
+<p class="admonition-title"><span class="caption-number">Definition 1.3 </span> (Entropie)</p>
+<section class="definition-content" id="proof-content">
+<p>Soit <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> une variable aléatoire discrète à valeurs dans l’alphabet <span class="math notranslate nohighlight">\(\mathcal{X}\)</span> de d.d.p. <span class="math notranslate nohighlight">\(p(x)=Prob(X=x), \; x \in \mathcal{X}\)</span>, alors l’entropie associée est donnée par</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\boldsymbol{\mathbf{H}}(X)&amp;= -\sum_{x \in \mathcal{X}}{p(X=x)\log_2{(p(X=x))}} \nonumber \\
+&amp;= - \boldsymbol{\mathbb{E}}(\log_2{p(X)})
+\end{aligned}\end{split}\]</div>
+</section>
+</div><p>C’est la <em>“quantité d’information moyenne”</em> exprimée en bits/symbole.</p>
+<div class="proof property admonition" id="property-3">
+<p class="admonition-title"><span class="caption-number">Property 1.2 </span></p>
+<section class="property-content" id="proof-content">
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X)\)</span> est déterministe et c’est une
+fonction(nelle) de <span class="math notranslate nohighlight">\(p(x)\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X) \geq 0\)</span> (positivité),</p></li>
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X)=0\)</span> <span class="math notranslate nohighlight">\(\Leftrightarrow\)</span> <span class="math notranslate nohighlight">\(X\)</span> est
+déterministe,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X)=\log_2{(M)}\)</span> pour distribution uniforme
+de symboles <span class="math notranslate nohighlight">\(M\)</span>-aire,</p></li>
+<li><p>Invariance par équivalence (ie. <span class="math notranslate nohighlight">\(Y=f(X)\)</span> où <span class="math notranslate nohighlight">\(f(.)\)</span> inversible),</p></li>
+<li><p>L’entropie d’une source <span class="math notranslate nohighlight">\(M\)</span>-aire vérifie</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X) \leq \log_2{(M)}\]</div>
+<p>avec égalité pour une source à distribution uniforme.</p>
+</li>
+</ul>
+</section>
+</div><div class="proof example admonition" id="example-4">
+<p class="admonition-title"><span class="caption-number">Example 1.1 </span></p>
+<section class="example-content" id="proof-content">
+<p>Soit <span class="math notranslate nohighlight">\(X\)</span> à valeurs dans un alphabet binaire <span class="math notranslate nohighlight">\(\mathcal{X}=\left\{x_{0}, x_{1}\right\}\)</span> tel que <span class="math notranslate nohighlight">\(P\left(X=x_{0}\right)=p\)</span> and
+<span class="math notranslate nohighlight">\(P\left(X=x_{1}\right)=1-p.\)</span> Alors</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{H}(X)=\mathrm{H}_{\mathrm{b}}(p)\]</div>
+<p>où <span class="math notranslate nohighlight">\(\mathrm{H}_{\mathrm{b}}(\mathrm{p})\)</span> est ce que l’on nomme la fonction d’entropie binaire donnée par</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{H}_{\mathrm{b}}(p) \triangleq p \log \frac{1}{p}+(1-p) \log \frac{1}{1-p}\]</div>
+</section>
+</div></section>
+<section id="entropie-conjointe-et-conditionnelle">
+<h2><span class="section-number">1.3.3. </span>Entropie conjointe et conditionnelle<a class="headerlink" href="#entropie-conjointe-et-conditionnelle" title="Permalink to this headline">#</a></h2>
+<div class="proof definition admonition" id="definition-5">
+<p class="admonition-title"><span class="caption-number">Definition 1.4 </span> (Entropie conjointe )</p>
+<section class="definition-content" id="proof-content">
+<p>Soient <span class="math notranslate nohighlight">\(X\)</span> et <span class="math notranslate nohighlight">\(Y\)</span> deux variables aléatoires discrètes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\boldsymbol{\mathbf{H}}(X,Y)&amp;= \nonumber -\sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}}{p(X=x,Y=y)\log_2{(p(X=x, Y=y))}}\\
+&amp;=  - \boldsymbol{\mathbb{E}}(\log_2{p(X,Y)})
+\end{aligned}\end{split}\]</div>
+</section>
+</div><p>On remarquera que</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X,Y)=\boldsymbol{\mathbf{H}}(Y,X).\]</div>
+<div class="proof definition admonition" id="definition-6">
+<p class="admonition-title"><span class="caption-number">Definition 1.5 </span> (Entropie de <span class="math notranslate nohighlight">\(Y\)</span> sachant <span class="math notranslate nohighlight">\(X=x\)</span>)</p>
+<section class="definition-content" id="proof-content">
+<p>soient <span class="math notranslate nohighlight">\(X\)</span> et <span class="math notranslate nohighlight">\(Y\)</span> deux variables aléatoires discrètes, alors l’entropie de <span class="math notranslate nohighlight">\(Y\)</span> sachant <span class="math notranslate nohighlight">\(X=x\)</span> est donnée</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\boldsymbol{\mathbf{H}}(Y|X=x)&amp;= -\sum_{y \in \mathcal{Y}}{p(Y=y|X=x)\log_2{(p(Y=y |X=x))}} \nonumber\\
+&amp;=  - \boldsymbol{\mathbb{E}}(\log_2{p(Y | X=x)})
+\end{aligned}\end{split}\]</div>
+</section>
+</div><div class="proof definition admonition" id="definition-7">
+<p class="admonition-title"><span class="caption-number">Definition 1.6 </span> (Entropie conditionnelle)</p>
+<section class="definition-content" id="proof-content">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\boldsymbol{\mathbf{H}}(Y|X)&amp;= -\sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}}{p(X=x,Y=y)\log_2{(p(Y=y |X=x))}} \nonumber\\
+&amp;= \sum_{x \in \mathcal{X}}p(X=x)\boldsymbol{\mathbf{H}}(Y|X=x) = \boldsymbol{\mathbb{E}}(\boldsymbol{\mathbf{H}}(Y|X=x))\nonumber\\
+&amp;=  - \boldsymbol{\mathbb{E}}(\log_2{p(Y | X)})
+\end{aligned}\end{split}\]</div>
+</section>
+</div><div class="proof property admonition" id="property-8">
+<p class="admonition-title"><span class="caption-number">Property 1.3 </span></p>
+<section class="property-content" id="proof-content">
+<ol>
+<li><p><strong>chain rule :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X,Y) = \boldsymbol{\mathbf{H}}(X) + \boldsymbol{\mathbf{H}}(Y|X)=\boldsymbol{\mathbf{H}}(Y) + \boldsymbol{\mathbf{H}}(X|Y)\]</div>
+</li>
+<li><p><strong>borne inf :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X,Y) \geq \boldsymbol{\mathbf{H}}(X) \mbox{ ou } \boldsymbol{\mathbf{H}}(Y)\]</div>
+</li>
+<li><p><strong>Conditionnement :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X|Y) \leq \boldsymbol{\mathbf{H}}(X)\]</div>
+<p>égalité si <span class="math notranslate nohighlight">\(X\)</span> et <span class="math notranslate nohighlight">\(Y\)</span> indépendants</p>
+</li>
+<li><p><strong>Décroissance par conditionnement :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X_1|X_2,\cdots,X_n) \leq \cdots \leq \boldsymbol{\mathbf{H}}(X_1|X_2,X_3) \leq \boldsymbol{\mathbf{H}}(X_1|X_2) \leq\boldsymbol{\mathbf{H}}(X_1)\]</div>
+</li>
+<li><p><strong>Encadrement (sous additivité de l’entropie) :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X,Y) \leq \boldsymbol{\mathbf{H}}(X)+\boldsymbol{\mathbf{H}}(Y) \leq 2 \boldsymbol{\mathbf{H}}(X,Y)\]</div>
+</li>
+<li><p><strong>Entropie conjointe et conditionnement :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X,Y|Z)=\boldsymbol{\mathbf{H}}(X|Z)+\boldsymbol{\mathbf{H}}(Y|X,Z)\]</div>
+</li>
+<li><p><strong>positivité :</strong></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X|Y) \geq 0\]</div>
+<p>égalité si <span class="math notranslate nohighlight">\(X=f(Y)\)</span> où <span class="math notranslate nohighlight">\(f(.)\)</span> déterministe</p>
+</li>
+</ol>
+</section>
+</div><p>L’ensemble des définition précédentes se généralise assez facilement au cas de vecteurs de dimension supérieure à <span class="math notranslate nohighlight">\(2.\)</span> En particulier, soit
+<span class="math notranslate nohighlight">\(X_1, X_2,\cdots X_n\)</span> de loi conjointe <span class="math notranslate nohighlight">\(p(x_1,x_2,\cdots,x_n),\)</span> on aura par définition</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X_1, X_2,\cdots X_n)=-\boldsymbol{\mathbb{E}}(log_2(p(X_1, X_2,\cdots X_n))).\]</div>
+<p>On peut vérifier que</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X_1, X_2,\cdots X_n) \leq \sum_{i=1}^n{\boldsymbol{\mathbf{H}}(X_i)},\]</div>
+<p>avec égalité si et seulement si les <span class="math notranslate nohighlight">\(X_i\)</span> sont indépendants. La relation chaînée associée à l’entropie est quant à elle donnée par</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X_1, X_2,\cdots X_n)=\sum_{i=1}^n{\boldsymbol{\mathbf{H}}(X_i|X_{i-1},\cdots X_1)}.\]</div>
+</section>
+<section id="entropie-s-associee-s-a-une-variable-aleatoire-continue">
+<h2><span class="section-number">1.3.4. </span>Entropie(s) associée(s) à une variable aléatoire continue<a class="headerlink" href="#entropie-s-associee-s-a-une-variable-aleatoire-continue" title="Permalink to this headline">#</a></h2>
+<p>Si la notion d’information est bien reliée à l’entropie d’une variable aléatoire discrète, ce lien est moins évident pour une variable
+aléatoire continue.</p>
+<div class="proof definition admonition" id="definition-9">
+<p class="admonition-title"><span class="caption-number">Definition 1.7 </span> (Entropie différentielle)</p>
+<section class="definition-content" id="proof-content">
+<p>Soit <span class="math notranslate nohighlight">\(X\)</span> une variable aléatoire continue définie par une densité de probabilité <span class="math notranslate nohighlight">\(f(x),\)</span> alors l’entropie différentielle est donnée</p>
+<div class="math notranslate nohighlight">
+\[h(X)=-\int f(x) \log _{2}(f(x)) d x\]</div>
+</section>
+</div><p>On ne peut pas interpréter <span class="math notranslate nohighlight">\(h(X)\)</span> comme une mesure d’information ou d’incertitude dans le cas continue. Ceci peut se voir dans le cas d’un
+changement de variable. Soit <span class="math notranslate nohighlight">\(Y=f(X),\)</span> par changement de variable, on a <span class="math notranslate nohighlight">\(h(X) \neq h(Y)=h(f(X))\)</span> donc <span class="math notranslate nohighlight">\(h(X)\)</span> n’est pas une mesure d’information
+stricte. Dans le cas particulier du changement d’échelle, tel que <span class="math notranslate nohighlight">\(Y=a X,\)</span> on a <span class="math notranslate nohighlight">\(h(X) \neq h(a X)=h(X)+\log (a)\)</span> qui peut même être négatif!</p>
+<div class="proof property admonition" id="property-10">
+<p class="admonition-title"><span class="caption-number">Property 1.4 </span></p>
+<section class="property-content" id="proof-content">
+<ol>
+<li><p>Loi uniforme sur <span class="math notranslate nohighlight">\([a, b]:\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{c}
+    f(x)=\frac{1}{b-a} \\
+    h(x)=\log (b-a)
+    \end{array}\end{split}\]</div>
+</li>
+<li><p>Loi normale de moyenne <span class="math notranslate nohighlight">\(\mu\)</span> et variance <span class="math notranslate nohighlight">\(\sigma^{2}:\)</span></p>
+<div class="math notranslate nohighlight">
+\[f(x)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left(-\frac{(x-\mu)^{2}}{2 \sigma^{2}}\right)\]</div>
+<div class="math notranslate nohighlight">
+\[h(x)=\frac{1}{2} \log 2 \pi e+\log (\sigma)\]</div>
+</li>
+</ol>
+</section>
+</div><p>Comme pour le cas discret, on peut définir des entropies conjointes et conditionnelles. Soit <span class="math notranslate nohighlight">\(X_{1}, X_{2}, \cdots, X_{n}\)</span> associées à la
+densité conjointe <span class="math notranslate nohighlight">\(f\left(x_{1}, x_{2}, \cdots, x_{n}\right),\)</span> l’entropie différentielle conjointe est définie comme suit</p>
+<div class="math notranslate nohighlight">
+\[h\left(X_{1}, X_{2}, \cdots, X_{n}\right)=-\int f\left(x_{1}, x_{2}, \cdots, x_{n}\right) \log _{2}\left(f\left(x_{1}, x_{2}, \cdots, x_{n}\right)\right) d x_{1} d x_{2} \cdots d x_{n}.\]</div>
+<p>De même pour deux v.a. <span class="math notranslate nohighlight">\(X\)</span> et <span class="math notranslate nohighlight">\(Y\)</span>, l’entropie différentielle conditionnelle de <span class="math notranslate nohighlight">\(X\)</span> sachant <span class="math notranslate nohighlight">\(Y\)</span> est donnée par</p>
+<div class="math notranslate nohighlight">
+\[{h}(X \mid Y)=-\int f(x, y) \log _{2}(f(x \mid y)) d x d y.\]</div>
+<p>Ces quantités sont très utiles car elles permettent de calculer l’information mutuelle entre deux variables aléatoires, quantité fondamentale en théorie de l’information et qui pour le coup à la même interprétation en discret et en continu.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch1intro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">1. </span>Introduction à la théorie de l’information</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ch1sec2.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.4. </span>Information mutuelle</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2.5. Démodulation MAP bit et systèmes BICM. &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.6. Exemple Matlab : Systèmes BICM" href="BICM.html" />
+    <link rel="prev" title="2.4. Décodage MAP bit/symbole pour un code en bloc" href="ch2sec4.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fch2sec5.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch2sec5.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demodulation-souple-detection-map-bit">
+   2.5.1. Démodulation souple : détection MAP bit.
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-des-systemes-bicm">
+   2.5.2. Capacité des systèmes BICM
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Démodulation MAP bit et systèmes BICM.</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demodulation-souple-detection-map-bit">
+   2.5.1. Démodulation souple : détection MAP bit.
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-des-systemes-bicm">
+   2.5.2. Capacité des systèmes BICM
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="demodulation-map-bit-et-systemes-bicm">
+<h1><span class="section-number">2.5. </span>Démodulation MAP bit et systèmes BICM.<a class="headerlink" href="#demodulation-map-bit-et-systemes-bicm" title="Permalink to this headline">#</a></h1>
+<p>Nous étendons ici les notions de détection souple mise en exergue dans le cas binaire aux cas de sysèmes opérant avec modulations d’ordre élevé.</p>
+<section id="demodulation-souple-detection-map-bit">
+<h2><span class="section-number">2.5.1. </span>Démodulation souple : détection MAP bit.<a class="headerlink" href="#demodulation-souple-detection-map-bit" title="Permalink to this headline">#</a></h2>
+<p>L’avènement des systèmes de codage à décodage souple et itératifs s’est accompagné du développement de la détection “souple” des modulations.
+Comme nous le verrons par la suite, l’utilisation de codes dîts “modernes” tels que les turbo-codes (déjà vieux de 30 ans) et les codes LDPC (presque 60 ans…) n’est utilisée à son plein potentiel que si à l’entrée du décodeur, on fournit une entrée “souple”, souvent homogène à un LLR. Nous allons donc voir le principe de la démodulation souple, ie. la
+détection MAP d’un bit appartenant à un symbole non binaire <span class="math notranslate nohighlight">\(M\)</span>-aire qui est associé à une constellation <span class="math notranslate nohighlight">\(M\)</span>-aire.</p>
+<p>Soit le vecteur <span class="math notranslate nohighlight">\(m\)</span>-binaire de bits <span class="math notranslate nohighlight">\(\textbf{x}[n]=[x_1[n] \cdots x_m[n]]\)</span> qui représente l’étiquette binaire qui sera utilisée pour pour identifier un symbole d’une constellation<span class="math notranslate nohighlight">\(M\)</span>-aire, <span class="math notranslate nohighlight">\(m=\log_2{(M)}.\)</span> Les symboles sont supposés indépendants et équi-distribués. Chaque vecteur <span class="math notranslate nohighlight">\(\textbf{x}[n]\)</span> est alors “mappé” sur un symbole dune constellation <span class="math notranslate nohighlight">\(M\)</span>-aire <span class="math notranslate nohighlight">\(\mathcal{S}\)</span> de cardinalité <span class="math notranslate nohighlight">\(|\mathcal{S}|=M\)</span> en suitvant la règle de mapping donnée par la fonction bijective suivante</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathcal{M} : \mathbb{F}_2^m &amp; \longrightarrow &amp; \mathcal{S} \subset \mathbb{C} \nonumber \\
+x &amp; \mapsto &amp; s=\mathcal{M}(x)
+\end{aligned}\end{split}\]</div>
+<p>Un critère classique de détection symbole est donné par la règle du maximum de vraisemblance donné par</p>
+<div class="math notranslate nohighlight">
+\[\hat{s}_n = \mathrm{arg} \max_{s_n}{p(y[n] | s[n]) },\]</div>
+<p>où <span class="math notranslate nohighlight">\(p(y[n]|s[n])\)</span> est la vraisemblance associée à l’observation <span class="math notranslate nohighlight">\(y[n].\)</span> Cette dernière est supposée connue au récepteur car on sait caractériser la loi de transition du canal. De manière similaire au cas bloc, on peut également appliqué un critère MAP symbole qui est donné par</p>
+<div class="math notranslate nohighlight">
+\[\hat{s}_n = \mathrm{arg} \max_{s_n}{p(y[n] | s[n]) } p(s[n]),\]</div>
+<p>si on possède un a priori sur le symbole <span class="math notranslate nohighlight">\(s[n].\)</span> Maximum de vraisemblance et MAP sont équivalents si on a un apriori uniforme (ce qui est équivalent à ne pas en avoir…), dans ce cas <span class="math notranslate nohighlight">\(p(s[n])=1/M.\)</span> Ces deux dernières règles sont utiles pour un décodage à sorties “dures”. Après “demapping”, ie. appliquaton de la règle de mapping inverse donnée par
+<span class="math notranslate nohighlight">\(\mathcal{M}^{-1}(.),\)</span> on pourra fournir des bits décidés à un décodeur de canal utilisant des entrées dures/décidées. Cependant, si on considère que le code de canal utilisé pour la transmission est un code binaire et que son décodage peut faire usage d’entrées “souples”, ie. sous forme de probabilités bit ou de manière équivalente sous forme de
+LLRs, il convient alors de dériver une règle de démodulation à décisions “souples” au niveau bit. On va donc dériver un critère de détection MAP bit dont l’expression dans le domaine lograrithmique est donnée par</p>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 2.13 </span> (Démodulation MAP bit)</p>
+<section class="definition-content" id="proof-content">
+<p>Soit <span class="math notranslate nohighlight">\(\textbf{x}[n]=[x_1[n] \cdots x_m[n]]\)</span> le vecteur binaire de <span class="math notranslate nohighlight">\(m\)</span> bits correspondant à l’étiquetage du symbole <span class="math notranslate nohighlight">\(s[n]\)</span> d’une constellation
+<span class="math notranslate nohighlight">\(M\)</span>-aire <span class="math notranslate nohighlight">\(\mathcal{S},\)</span> le log-rapport de probabilité est alors donné par</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+L(x_i[n])&amp;=  \log{\left( \frac{p(x_i[n]=0\mid y[n])}{p(x_i[n]=1\mid y[n])}\right)}\nonumber \\
+&amp;=  \log{\left( \frac{\sum_{s[n] \in \mathcal{S}_0^i}{p(y[n]|s[n])p(s[n])}}{\sum_{s[n] \in \mathcal{S}_1^i}{p(y[n]|s[n])p(s[n])}} \right)}
+\end{aligned}\end{split}\]</div>
+<p>où <span class="math notranslate nohighlight">\(\mathcal{S}_0^i\subset \mathcal{S}\)</span> (resp. <span class="math notranslate nohighlight">\(\mathcal{S}_1^i\)</span>) est le sous ensemble des symboles <span class="math notranslate nohighlight">\(s \in \mathcal{S}\)</span> tels que le <span class="math notranslate nohighlight">\(i\)</span>-ième bit <span class="math notranslate nohighlight">\(x_i[n]\)</span> du vecteur <span class="math notranslate nohighlight">\(x[n],\)</span> tel que <span class="math notranslate nohighlight">\(s[n]=\mathcal{}\)</span> est le bit <span class="math notranslate nohighlight">\('0'\)</span> (resp. le <span class="math notranslate nohighlight">\(i\)</span>-ième bit <span class="math notranslate nohighlight">\(x_i[n]\)</span> du vecteur <span class="math notranslate nohighlight">\(x[n]\)</span> est le bit <span class="math notranslate nohighlight">\('1'\)</span>). <span class="math notranslate nohighlight">\(p(s[n])\)</span> est la probabilité a priori de <span class="math notranslate nohighlight">\(s[n]\)</span> qui sera considéré comme uniforme pour la plupart des cas d’intérêt.</p>
+</section>
+</div><p>Comme une a une relation bijective entre <span class="math notranslate nohighlight">\(s[n]\)</span> et <span class="math notranslate nohighlight">\(x[n],\)</span> on peut donner également donner l’expression</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+L(x_i[n])&amp;= \log{\left( \frac{p(x_i[n]=0\mid y[n])}{p(x_i[n]=1\mid y[n])} \right)}\nonumber \\
+&amp;=  \log{\left( \frac{\sum_{x[n] \in \mathcal{X}_0^i}{p(y[n]|x[n])p(x[n])}}{\sum_{x[n] \in \mathcal{X}_1^i}{p(y[n]|x[n])p(x[n])}} \right)}
+\end{aligned}\end{split}\]</div>
+<p>où <span class="math notranslate nohighlight">\(\mathcal{X}_0^i \subset \mathbb{F}_2^m\)</span> est l’ensemble des vecteurs de <span class="math notranslate nohighlight">\(\mathbb{F}_2^m\)</span> de composante <span class="math notranslate nohighlight">\(i\)</span> nulle (définition similaire pour <span class="math notranslate nohighlight">\(\mathcal{X}_1^i\)</span>). On aura également <span class="math notranslate nohighlight">\(p(y[n]|x[n])=p(y[n]|s[n]=\mathcal{M}(x([n]).\)</span> Quand une a priori sera disponible, ce sera souvent un apriori indépendant pour chaque bit du vecteur <span class="math notranslate nohighlight">\(x[n],\)</span> ce qui s’écrit comme</p>
+<div class="math notranslate nohighlight">
+\[p(x[n])=\prod_{i=1}^m{p(x_i[n])}.\]</div>
+<p>Cette dernière relation pourra également s’écrire à partir des LLRs a priori associés.</p>
+</section>
+<section id="capacite-des-systemes-bicm">
+<h2><span class="section-number">2.5.2. </span>Capacité des systèmes BICM<a class="headerlink" href="#capacite-des-systemes-bicm" title="Permalink to this headline">#</a></h2>
+<p>Les capacités à entrées contraintes dérivées au chapitre précédent sont déterminées pour des systèmes qui opérent (codent) dans l’espace de la modulation. Pour des raisons
+pratiques (facilité de design, complexité), la plupart des schémas codés considèrent une concaténation série entre code binaire et une modulation <span class="math notranslate nohighlight">\(M=2^m\)</span>-aire éventuellement séparé par un entrelaceur, souvent dénommés par l’acronyme BICM pour <em><strong>Bit interleaved coded modulation</strong></em>. Dans la plupart des système BICM, le décodeur de canal utilise des entrées “souples”, il faut donc utiliser un système dît à <em><strong>démodulation souple</strong></em>. L’ajout d’un entrelaceur dépend du système de codage utilisé. Généralement si le code
+externe est un code défini par un treillis ou un code en bloc court, il faut ajouter un entrelaceur. Si on a un code de type LDPC, nous verrons que ce n’est pas utile. Une fois le système spécifié, on peut maintenant se poser la question des performances asymptotiques des systèmes BICM, ie. qu’on se pose la question de la sous-optimalité éventuelle de ces systèmes. Comme on démodule pour se ramener à l’estimation d’une information binaire, si on inclut symboliquement l’opération de modulation/démodulation dans le canal, alors un système BICM peut être vu comme un canal constitué de <span class="math notranslate nohighlight">\(\log_2(M)\)</span> canaux parallèles <em>indépendants</em>, l’indépendance étant garantie théoriquement par l’ajout de l’entrelaceur entre le code et la modulation. La capacité atteignable dépend du mapping utilisé et est donnée par</p>
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{bicm}}=m-\frac{1}{2}\sum_{k=0}^{m-1}\sum_{c=0}^{1}{\mathbb{E}\left( \log_2{\left(\frac{\sum_{s_i \in \mathcal{S}}{p(y|s_i)}}{\sum_{s_j \in \mathcal{S}_c^k}{p(y|s_j)}} \right)}\right)}\]</div>
+<p>On peut montrer la formule suivante, plus commode à utiliser et interpréter :</p>
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{bicm}}=\sum_{k=1}^m \boldsymbol{\mathbf{I}}(X_k;Y) \leq C_{AWGN},\]</div>
+<p>où</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{I}}(X_k;Y)=1-\mathbb{E}_{X_k,Y}{(\log_2(1+e^{-(1-2 X_k)L(X_k)}))}.\]</div>
+<p><span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{I}}(X_k;Y)\)</span> est la capacité binaire associée au canal associé au <span class="math notranslate nohighlight">\(k\)</span>-ième bit du symbole après marginalisation bit. Notons également que <span class="math notranslate nohighlight">\(L(X_k)\)</span> est une fonction implicite de <span class="math notranslate nohighlight">\(Y.\)</span> A partir de ces expressions, on peut alors facilement calculer une estimée</p>
+<div class="math notranslate nohighlight">
+\[\hat{I}({X_k},{Y})=1-\frac{1}{N_k} \sum_n{(\log_2(1+e^{-(1-2 x_k[n])L(x_k[n])}))}.\]</div>
+<p>En général pour les modulations linéaires, le mapping de Gray permet d’être quasi-optimal pour les efficacités moyennes à grandes.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch2sec4.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2.4. </span>Décodage MAP bit/symbole pour un code en bloc</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="BICM.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.6. </span>Exemple Matlab : Systèmes BICM</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.6. Exemples de calcul de la capacité en Matlab &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.7. Théorème du codage canal" href="ch1sec4.html" />
+    <link rel="prev" title="1.5. Capacité d’un canal de transmission" href="ch1sec3.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/PlayWithCapacity.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FPlayWithCapacity.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/PlayWithCapacity.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-gaussiennes">
+   1.6.1. 1. Capacité du canal Gaussien à entrées gaussiennes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-binaires">
+   1.6.2. 2. Capacité du canal Gaussien à entrées binaires
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-non-binaires">
+   1.6.3. 3. Capacité du canal Gaussien à entrées non binaires
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calcul-par-integration-de-monte-carlo">
+     1.6.3.1. Calcul par intégration de Monté Carlo
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-vous-de-jouer">
+   1.6.4. 3.2 A vous de jouer…
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Exemples de calcul de la capacité en Matlab</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-gaussiennes">
+   1.6.1. 1. Capacité du canal Gaussien à entrées gaussiennes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-binaires">
+   1.6.2. 2. Capacité du canal Gaussien à entrées binaires
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-du-canal-gaussien-a-entrees-non-binaires">
+   1.6.3. 3. Capacité du canal Gaussien à entrées non binaires
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calcul-par-integration-de-monte-carlo">
+     1.6.3.1. Calcul par intégration de Monté Carlo
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-vous-de-jouer">
+   1.6.4. 3.2 A vous de jouer…
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="exemples-de-calcul-de-la-capacite-en-matlab">
+<h1><span class="section-number">1.6. </span>Exemples de calcul de la capacité en Matlab<a class="headerlink" href="#exemples-de-calcul-de-la-capacite-en-matlab" title="Permalink to this headline">#</a></h1>
+<hr class="docutils" />
+<section id="capacite-du-canal-gaussien-a-entrees-gaussiennes">
+<h2><span class="section-number">1.6.1. </span>1. Capacité du canal Gaussien à entrées gaussiennes<a class="headerlink" href="#capacite-du-canal-gaussien-a-entrees-gaussiennes" title="Permalink to this headline">#</a></h2>
+<hr class="docutils" />
+<p>La capacité pour une entrée non contrainte est donnée par la capacité d’un canal Gaussien complexe à temps discret avec une énergie moyenne par symbole <span class="math notranslate nohighlight">\(\mathrm{E}_{\mathrm{s}}\)</span> et une variance par dimension <span class="math notranslate nohighlight">\(\sigma^{2}=\mathrm{N_0} / 2\)</span>  est donnée par</p>
+<div class="math notranslate nohighlight">
+\[
+C_{AWGN}=\log_2 \left(1+\frac{E_{s}}{2 \sigma^{2}}\right)=\log_2 \left(1+\frac{E_{s}}{N_0}\right) \text { [bits/channel use] or [bits/symbol], }
+\]</div>
+<p>Pour les <span class="math notranslate nohighlight">\(E_s/N_0\)</span> faibles (régime limité en puissance), on a</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\mathrm{C}_{\textrm{AWGN }} &amp;=\log_2(1+E_s/N_0) \\
+&amp;\approx \frac{1}{\ln 2} \cdot E_s/N_0.
+\end{aligned}
+\end{split}\]</div>
+<p>On a donc un régime linéaire. A contrario, pour les forts <span class="math notranslate nohighlight">\(E_s/N_0,\)</span> on a un régime logarithmique, ie.</p>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{C}_{\textrm{AWGN }} \approx \log_2(E_s/N_0)
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">EsN0dB</span><span class="p">=(</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="mi">30</span><span class="p">);</span><span class="w"></span>
+<span class="n">EsN0</span><span class="p">=</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">EsN0dB</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="n">ShannonCapacity</span><span class="p">=</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">EsN0</span><span class="p">);</span><span class="w"></span>
+
+<span class="c">%Capa vs SNR - linear scale</span><span class="w"></span>
+<span class="nb">figure</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">EsN0dB</span><span class="p">,</span><span class="n">ShannonCapacity</span><span class="p">);</span><span class="w"></span>
+<span class="n">grid</span><span class="w"> </span><span class="s">on</span><span class="w"></span>
+
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;bit per channel use&#39;</span><span class="p">)</span><span class="w"></span>
+
+
+<span class="c">%Capa vs SNR - log scale</span><span class="w"></span>
+<span class="nb">figure</span><span class="w"></span>
+<span class="nb">semilogy</span><span class="p">(</span><span class="n">EsN0dB</span><span class="p">,</span><span class="n">ShannonCapacity</span><span class="p">);</span><span class="w"></span>
+<span class="n">hold</span><span class="w"> </span><span class="s">on</span><span class="w"></span>
+<span class="nb">semilogy</span><span class="p">(</span><span class="n">EsN0dB</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="n">EsN0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">))</span><span class="o">/</span><span class="nb">log</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="s">&#39;r--&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">semilogy</span><span class="p">(</span><span class="n">EsN0dB</span><span class="p">(</span><span class="k">end</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="k">end</span><span class="p">),</span><span class="w"> </span><span class="nb">log2</span><span class="p">(</span><span class="n">EsN0</span><span class="p">(</span><span class="k">end</span><span class="o">-</span><span class="mi">10</span><span class="p">:</span><span class="k">end</span><span class="p">)),</span><span class="s">&#39;g--&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;bit per channel use&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/PlayWithCapacity_1_1.png" src="_images/PlayWithCapacity_1_1.png" />
+<img alt="_images/PlayWithCapacity_1_2.png" src="_images/PlayWithCapacity_1_2.png" />
+</div>
+</div>
+<p>Quand on regarde la capacité en fonction de <span class="math notranslate nohighlight">\(E_b/N_0\)</span>, on obtient</p>
+<div class="math notranslate nohighlight">
+\[C_{AWGN}=\log_2(1 + R \frac{E_b}{N_0})\]</div>
+<p>où <span class="math notranslate nohighlight">\(E_b\)</span> est l’énergie par bit utile/d’information. On a alors</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{E_{b}}{N_{0}}&gt;\frac{2^{R}-1}{R} \underset{R \to 0}{\longrightarrow}  \ln(2)=-1.59 dB.
+\]</div>
+<p>En prenant, le rendement comme étant le sup atteignable, ie. <span class="math notranslate nohighlight">\(R^*= C_{AWGN},\)</span> on peut tracer la limite de Shannon en fonction de <span class="math notranslate nohighlight">\(\frac{E_{b}}{N_{0}}.\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">%Capa vs Eb/N0 - linear sacle</span><span class="w"></span>
+<span class="n">EsN0dB</span><span class="p">=(</span><span class="o">-</span><span class="mi">100</span><span class="p">:</span><span class="mi">30</span><span class="p">);</span><span class="w"></span>
+<span class="n">EsN0</span><span class="p">=</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">EsN0dB</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="n">ShannonCapacity</span><span class="p">=</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">EsN0</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">figure</span><span class="w"></span>
+<span class="s">plot(EsN0dB-10*log10(ShannonCapacity),log2(1+EsN0))</span><span class="p">;</span><span class="w"></span>
+<span class="n">hold</span><span class="w"> </span><span class="s">on</span><span class="w"> </span>
+<span class="nb">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">1.59</span><span class="p">,</span><span class="o">-</span><span class="mf">1.59</span><span class="o">+</span><span class="nb">eps</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span><span class="s">&#39;r--&#39;</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">grid</span><span class="w"> </span><span class="s">on</span><span class="w"></span>
+
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_b/N_0&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;bit per channel use&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/PlayWithCapacity_3_1.png" src="_images/PlayWithCapacity_3_1.png" />
+</div>
+</div>
+</section>
+<section id="capacite-du-canal-gaussien-a-entrees-binaires">
+<h2><span class="section-number">1.6.2. </span>2. Capacité du canal Gaussien à entrées binaires<a class="headerlink" href="#capacite-du-canal-gaussien-a-entrees-binaires" title="Permalink to this headline">#</a></h2>
+<hr class="docutils" />
+<p>Soit le modèle de réception suivant:</p>
+<div class="math notranslate nohighlight">
+\[y[n]=x[n]+b[n],\]</div>
+<p>où <span class="math notranslate nohighlight">\(x[n] \in\{-1,+1\}.\)</span>
+par définition, la capacité à entrée binaire est fournie par</p>
+<div class="math notranslate nohighlight">
+\[
+I(X ; Y)=\frac{1}{2} \sum_{x=\pm 1} \int_{\mathbb{R}} f(y \mid x) \log _{2}\left(\frac{2 f(y \mid x)}{f(y \mid x=+1)+f(y \mid x=-1)}\right) dy
+\]</div>
+<p>En utilisant le fait que</p>
+<div class="math notranslate nohighlight">
+\[I(X ; Y)=H(X)-H(X|Y),\]</div>
+<p>on peut écrire</p>
+<div class="math notranslate nohighlight">
+\[I(X ; Y)=1+\mathbb{E}_{X,Y}(\log_2(p(X \mid Y))).\]</div>
+<p>On peut alors introduire la quantité suivante (LLR)</p>
+<div class="math notranslate nohighlight">
+\[L(y)=\log{\left(\frac{p(x=+1 | Y = y)}{p(x=-1 | Y =y)}\right)}.\]</div>
+<p>En utilisant le fait que <span class="math notranslate nohighlight">\({p(x=+1 | y)}+{p(x=-1 | y)}=1,\)</span> il vient</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{eqnarray}
+p(x =+1 | {y}) &amp; = &amp; \frac{e^{L(y)}}{1+e^{L(y)}} \\
+&amp;=&amp; \frac{1}{1+e^{-L(y)}} \nonumber \\
+&amp; &amp;\nonumber \\
+p(x =-1 | {y}) &amp; = &amp; \frac{1}{1+e^{L(y)} }
+\end{eqnarray}
+\end{split}\]</div>
+<p>Ce qui permet d’écrire $<span class="math notranslate nohighlight">\(p(x | {y})  =  \frac{1}{1+e^{-x L(y)}}\)</span>$</p>
+<p>Par intégration de Monte-Carlo, on obtient alors un estimateur empirique non biasé simple donné par</p>
+<div class="math notranslate nohighlight">
+\[\hat{I}(X ; Y)=1+\frac{1}{N}\sum_{n=0}^{N-1}{\log_2(p(x[n] \mid y[n]))}=1-\frac{1}{N}\sum_{n=0}^{N-1}{\log_2(1+e^{-x[n] L(y[n])})}.\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="nb">clear</span><span class="w"> </span><span class="nb">all</span><span class="p">;</span><span class="w"></span>
+
+<span class="c">%%%%</span><span class="w"></span>
+<span class="n">EbN0db</span><span class="p">=</span><span class="mf">0.187</span><span class="p">;</span><span class="w"></span>
+<span class="n">N</span><span class="p">=</span><span class="mi">1000000</span><span class="p">;</span><span class="w"></span>
+<span class="n">bits</span><span class="p">=</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="n">BPSK</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">bits</span><span class="p">;</span><span class="w"></span>
+<span class="n">R</span><span class="p">=</span><span class="mf">0.5</span><span class="p">;</span><span class="w"></span>
+<span class="n">N0</span><span class="p">=</span><span class="mi">1</span><span class="o">/</span><span class="n">R</span><span class="o">/</span><span class="mi">10</span>^<span class="p">(</span><span class="n">EbN0db</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">bruit</span><span class="p">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">);</span><span class="w"></span>
+<span class="n">sigma2</span><span class="p">=</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="n">y</span><span class="p">=</span><span class="n">BPSK</span><span class="o">+</span><span class="n">bruit</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">LLR</span><span class="p">=</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma2</span><span class="o">*</span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+
+<span class="c">%Capacity for Eb/N0=0.2dB</span><span class="w"></span>
+<span class="n">Capacity</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="nb">mean</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">BPSK</span><span class="o">.*</span><span class="n">LLR</span><span class="p">)))</span><span class="w"></span>
+
+<span class="c">%convergence of mean estimator</span><span class="w"></span>
+<span class="n">CapacityPartial</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">./</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span><span class="o">.*</span><span class="nb">cumsum</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">BPSK</span><span class="o">.*</span><span class="n">LLR</span><span class="p">)));</span><span class="w"></span>
+<span class="nb">semilogx</span><span class="p">((</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">),</span><span class="n">CapacityPartial</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">semilogx</span><span class="p">((</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">),</span><span class="n">CapacityPartial</span><span class="p">(</span><span class="k">end</span><span class="p">)</span><span class="o">*</span><span class="nb">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">),</span><span class="s">&#39;-&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;trials&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Capacity =
+
+    0.5002
+</pre></div>
+</div>
+<img alt="_images/PlayWithCapacity_5_1.png" src="_images/PlayWithCapacity_5_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">ESN0db</span><span class="p">=(</span><span class="o">-</span><span class="mi">20</span><span class="p">:</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="n">N</span><span class="p">=</span><span class="mi">5000000</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">for</span><span class="w"> </span><span class="n">snr</span><span class="p">=</span><span class="mi">1</span><span class="p">:</span><span class="nb">numel</span><span class="p">(</span><span class="n">ESN0db</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">bits</span><span class="p">=</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="n">BPSK</span><span class="p">=</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">bits</span><span class="p">;</span><span class="w"></span>
+<span class="n">N0</span><span class="p">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span>^<span class="p">(</span><span class="n">ESN0db</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="n">bruit</span><span class="p">=</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">);</span><span class="w"></span>
+<span class="n">sigma2</span><span class="p">=</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="n">y</span><span class="p">=</span><span class="n">BPSK</span><span class="o">+</span><span class="n">bruit</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">LLR</span><span class="p">=</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma2</span><span class="o">*</span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+
+<span class="c">%Capacity for Eb/N0=0.2dB</span><span class="w"></span>
+<span class="n">Capacity</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="mi">1</span><span class="o">-</span><span class="nb">mean</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">BPSK</span><span class="o">.*</span><span class="n">LLR</span><span class="p">)));</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="nb">figure</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="nb">log10</span><span class="p">(</span><span class="n">Capacity</span><span class="p">),</span><span class="n">Capacity</span><span class="p">)</span><span class="w"></span>
+<span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="nb">log10</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="nb">log10</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">Capacity</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">Capacity</span><span class="p">,</span><span class="s">&#39;b-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="nb">log10</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">ESN0db</span><span class="o">/</span><span class="mi">10</span><span class="p">))),</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">ESN0db</span><span class="o">/</span><span class="mi">10</span><span class="p">)),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_b/N_0&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">legend</span><span class="p">(</span><span class="s">&#39;BPSK Capacity&#39;</span><span class="p">,</span><span class="s">&#39;QPSK capacity&#39;</span><span class="p">,</span><span class="s">&#39;Gaussian Inputs Capacity&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="nb">figure</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="p">,</span><span class="n">Capacity</span><span class="p">)</span><span class="w"></span>
+<span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="nb">log10</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">Capacity</span><span class="p">,</span><span class="s">&#39;b-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">ESN0db</span><span class="p">,</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">ESN0db</span><span class="o">/</span><span class="mi">10</span><span class="p">)),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">legend</span><span class="p">(</span><span class="s">&#39;BPSK Capacity&#39;</span><span class="p">,</span><span class="s">&#39;QPSK capacity&#39;</span><span class="p">,</span><span class="s">&#39;Gaussian Inputs Capacity&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/PlayWithCapacity_6_1.png" src="_images/PlayWithCapacity_6_1.png" />
+<img alt="_images/PlayWithCapacity_6_2.png" src="_images/PlayWithCapacity_6_2.png" />
+</div>
+</div>
+</section>
+<section id="capacite-du-canal-gaussien-a-entrees-non-binaires">
+<h2><span class="section-number">1.6.3. </span>3. Capacité du canal Gaussien à entrées non binaires<a class="headerlink" href="#capacite-du-canal-gaussien-a-entrees-non-binaires" title="Permalink to this headline">#</a></h2>
+<hr class="docutils" />
+<p>La capacité pour une entrée contrainte non binaire est donnée par</p>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{C}=\mathrm{I}(X ; Y)=\frac{1}{M}\sum_{x \in\mathcal{X}}\int p(y|x) \log_2 \frac{p(y|x)}{\frac{1}{M} \sum_x p(y|x)} dy.
+\]</div>
+<section id="calcul-par-integration-de-monte-carlo">
+<h3><span class="section-number">1.6.3.1. </span>Calcul par intégration de Monté Carlo<a class="headerlink" href="#calcul-par-integration-de-monte-carlo" title="Permalink to this headline">#</a></h3>
+<p>Contrairement, au cas précédent, même pour un canal de type AWGN, il n’existe pas d’expression analytique plus simple que cette formulation intégrale. Il faut donc pour un canal particulier calculer l’expression intégrale par intégration numérique ou de Monte-Carlo. Pour calculer efficacement cette capacité, cela revient à évaluer <span class="math notranslate nohighlight">\(\mathbf{C} = I({X};{Y}) = H({X})-H({X}\mid{Y})\)</span> au travers des Termes <span class="math notranslate nohighlight">\(H({X})\)</span> ou <span class="math notranslate nohighlight">\(H({X}\mid{Y}).\)</span> Voilà alors les différentes étapes pour calculer la capacité</p>
+<ol class="simple">
+<li><p><strong>Calcul  de <span class="math notranslate nohighlight">\(H({X})\)</span> :</strong></p></li>
+</ol>
+<p>En considérant que le maximum est atteint pour une distribution uniforme des symboles d’entrée, on obtient facilement que $<span class="math notranslate nohighlight">\(H({X})=\log_2(M).\)</span>$</p>
+<ol class="simple">
+<li><p><strong>Calcul  de <span class="math notranslate nohighlight">\(H({X}\mid{Y})\)</span> :</strong></p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[H({X}\mid{Y})= - \mathbb{E}_{X,Y}{\log_2{p(X | Y)}} =  \mathbb{E}({h(X | Y)})\]</div>
+<p>On doit donc calculer le terme <span class="math notranslate nohighlight">\(h(X | Y)=-\log_2{(p(X | Y))}.\)</span> Ceci est aisément obtenu en considérant la vraisemblance du canal de la manière suivante</p>
+<div class="math notranslate nohighlight">
+\[ p(X | Y) =  \frac{p(Y|X)}{\sum_{x \in \mathcal{X}}{p(Y|X=x)}}.\]</div>
+<p>Le calcul de <span class="math notranslate nohighlight">\(H({X}\mid{Y})\)</span> peut alors se faire par Monte-Carlo en utilisant un estimateur asymptotiquement sans biais de cette quantité. En effet, par ergodicité, on a</p>
+<div class="math notranslate nohighlight">
+\[H({X}\mid{Y})= \mathbb{E}({{h(X | Y)}}) = \lim_{N \rightarrow +\infty}\frac{1}{N} \sum_{n}{h(x(n)| y(n))}\]</div>
+<p>où <span class="math notranslate nohighlight">\(h(x(n)| y(n))=-\log_2(p(x(n) | y(n)))).\)</span></p>
+<p>La procédure globale pour l’estimation par monte-Carlo peut alors se résumé comme suit</p>
+<p>a. Tirer aléatoirement et uniformément des symboles issue de la constellation,</p>
+<p>b. Calculer pour chaque couple <span class="math notranslate nohighlight">\((x(n),y(n))\)</span>, <span class="math notranslate nohighlight">\(h(x(n) | y(n))\)</span> et moyenner.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Simulation parameters</span><span class="w"></span>
+<span class="n">Ns</span><span class="p">=</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w">                  </span><span class="c">% Number of Symbols </span><span class="w"></span>
+<span class="n">Es_N0_dB</span><span class="w"> </span><span class="p">=</span><span class="w">  </span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">40</span><span class="p">);</span><span class="w"></span>
+
+<span class="c">%loop for order M</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="mi">256</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w">                     </span><span class="c">% Constellation Order</span><span class="w"></span>
+<span class="n">Constellation</span><span class="p">=</span><span class="n">qammod</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="c">% Loop variable for SNR</span><span class="w"></span>
+<span class="c">% Monte carlo parameter</span><span class="w"></span>
+<span class="w">    </span>
+<span class="k">for</span><span class="w"> </span><span class="n">snr</span><span class="p">=</span><span class="mi">1</span><span class="p">:</span><span class="nb">numel</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c">%generate M-QAM modulation</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">randi</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Ns</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">qammod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Es_N0</span><span class="p">=</span><span class="mi">10</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="c">%normal</span><span class="w"></span>
+<span class="w">    </span><span class="n">sigx2</span><span class="p">=</span><span class="nb">var</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">N0</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">sigx2</span><span class="w"> </span><span class="o">/</span><span class="p">(</span><span class="n">Es_N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%add noise</span><span class="w"></span>
+<span class="w">    </span><span class="n">noise_</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span>1<span class="nb">j</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sig_rx</span><span class="w">  </span><span class="p">=</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">noise_</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Compute Capacity</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">Hx</span><span class="p">=</span><span class="nb">log2</span><span class="p">(</span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Conditionnal Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">xref</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">Constellation</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Ns</span><span class="p">);</span><span class="w">       </span><span class="c">%</span><span class="w"></span>
+<span class="w">    </span><span class="n">d2</span><span class="p">=</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="nb">repmat</span><span class="p">(</span><span class="n">sig_rx</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">).</span><span class="o">&#39;-</span><span class="n">xref</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYX</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">d2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYx</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="n">sig_rx</span><span class="o">-</span><span class="n">Constellation</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PxY</span><span class="p">=</span><span class="n">PYx</span><span class="o">./</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">PYX</span><span class="p">)</span><span class="o">&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">HXY</span><span class="p">=</span><span class="o">-</span><span class="nb">mean</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="n">PxY</span><span class="o">&#39;</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">ConstrainedCapacity</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="n">Hx</span><span class="o">-</span><span class="n">HXY</span><span class="p">;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="n">ConstrainedCapacity</span><span class="p">)</span><span class="w"></span>
+
+<span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="w"> </span>
+
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="o">/</span><span class="mi">10</span><span class="p">)),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">legend</span><span class="p">({</span><span class="s">&#39;M=4&#39;</span><span class="p">,</span><span class="s">&#39;M=16&#39;</span><span class="p">,</span><span class="s">&#39;M=64&#39;</span><span class="p">,</span><span class="s">&#39;M=256&#39;</span><span class="p">,</span><span class="s">&#39;M=1024&#39;</span><span class="p">,</span><span class="s">&#39;Gaussian&#39;</span><span class="p">},</span><span class="s">&#39;Location&#39;</span><span class="p">,</span><span class="s">&#39;northwest&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0 dB&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity in bpcu&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/PlayWithCapacity_8_1.png" src="_images/PlayWithCapacity_8_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="a-vous-de-jouer">
+<h2><span class="section-number">1.6.4. </span>3.2 A vous de jouer…<a class="headerlink" href="#a-vous-de-jouer" title="Permalink to this headline">#</a></h2>
+<ol class="simple">
+<li><p>Déterminer les capacités pour des signaux PSK et APSK et QAM-(8,32,128). Conclure.</p></li>
+<li><p>Regarder ces résultats en regardant la capacité versus <span class="math notranslate nohighlight">\(E_b/N_0\)</span>.</p></li>
+</ol>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "matlab"
+        },
+        kernelOptions: {
+            kernelName: "matlab",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'matlab'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch1sec3.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">1.5. </span>Capacité d’un canal de transmission</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ch1sec4.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.7. </span>Théorème du codage canal</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

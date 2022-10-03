@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2.6. Exemple Matlab : Systèmes BICM &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Codes convolutifs : structure et décodage" href="ch3intro.html" />
+    <link rel="prev" title="2.5. Démodulation MAP bit et systèmes BICM." href="ch2sec5.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/BICM.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FBICM.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/BICM.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demodulation-souple">
+   2.6.1. 1. Démodulation souple
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-bicm">
+   2.6.2. 2. Capacité BICM
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Exemple Matlab : Systèmes BICM</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#demodulation-souple">
+   2.6.1. 1. Démodulation souple
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#capacite-bicm">
+   2.6.2. 2. Capacité BICM
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="exemple-matlab-systemes-bicm">
+<h1><span class="section-number">2.6. </span>Exemple Matlab : Systèmes BICM<a class="headerlink" href="#exemple-matlab-systemes-bicm" title="Permalink to this headline">#</a></h1>
+<hr class="docutils" />
+<section id="demodulation-souple">
+<h2><span class="section-number">2.6.1. </span>1. Démodulation souple<a class="headerlink" href="#demodulation-souple" title="Permalink to this headline">#</a></h2>
+<hr class="docutils" />
+<p>Soit  <span class="math notranslate nohighlight">\(\textbf{x}[n]=[x_1[n] \cdots x_m[n]]\)</span> le vecteur binaire de <span class="math notranslate nohighlight">\(m\)</span> bits correspondant à l’étiquetage du symbole <span class="math notranslate nohighlight">\(s[n]\)</span> d’une constellation <span class="math notranslate nohighlight">\(M\)</span>-aire <span class="math notranslate nohighlight">\(\mathcal{S},\)</span> le log-rapport de probabilité est alors donné par</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+L(x_i[n])&amp;=  \log{\left( \frac{p(x_i[n]=0\mid y[n])}{p(x_i[n]=1\mid y[n])}\right)}\nonumber \\
+&amp;=  \log{\left( \frac{\sum_{s[n] \in \mathcal{S}_0^i}{p(y[n]|s[n])p(s[n])}}{\sum_{s[n] \in \mathcal{S}_1^i}{p(y[n]|s[n])p(s[n])}} \right)}
+\end{aligned}
+\end{split}\]</div>
+<p>où <span class="math notranslate nohighlight">\(\mathcal{S}_0^i\subset \mathcal{S}\)</span> (resp. <span class="math notranslate nohighlight">\(\mathcal{S}_1^i\)</span>) est le sous ensemble des symboles <span class="math notranslate nohighlight">\(s \in \mathcal{S}\)</span> tels que le <span class="math notranslate nohighlight">\(i\)</span>-ième bit <span class="math notranslate nohighlight">\(x_i[n]\)</span> du vecteur <span class="math notranslate nohighlight">\(x[n],\)</span> tel que <span class="math notranslate nohighlight">\(s[n]=\mathcal{}\)</span> est le bit <span class="math notranslate nohighlight">\('0'\)</span> (resp. le <span class="math notranslate nohighlight">\(i\)</span>-ième bit <span class="math notranslate nohighlight">\(x_i[n]\)</span> du vecteur <span class="math notranslate nohighlight">\(x[n]\)</span> est le bit <span class="math notranslate nohighlight">\('1'\)</span>). <span class="math notranslate nohighlight">\(p(s[n])\)</span> est la probabilité a priori de <span class="math notranslate nohighlight">\(s[n]\)</span> qui sera considéré comme uniforme pour la plupart des cas d’intérêt.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">Ns</span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w">                  </span><span class="c">% Number of Symbols </span><span class="w"></span>
+<span class="n">Es_N0_dB</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+
+<span class="c">%loop for order M</span><span class="w"></span>
+<span class="n">M</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="p">];</span><span class="w">                     </span><span class="c">% Constellation Order</span><span class="w"></span>
+<span class="n">Constellation</span><span class="p">=</span><span class="n">qammod</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="s">&#39;PlotConstellation&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="n">BinaryTable</span><span class="p">=</span><span class="n">de2bi</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="c">% Loop variable for SNR</span><span class="w"></span>
+<span class="c">% Monte carlo parameter</span><span class="w"></span>
+<span class="w">    </span>
+<span class="c">%generate M-QAM modulation</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">randi</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">Ns</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">qammod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Es_N0</span><span class="p">=</span><span class="mi">10</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="c">%normal</span><span class="w"></span>
+<span class="w">    </span><span class="n">sigx2</span><span class="p">=</span><span class="nb">var</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">N0</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">sigx2</span><span class="w"> </span><span class="o">/</span><span class="p">(</span><span class="n">Es_N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%add noise</span><span class="w"></span>
+<span class="w">    </span><span class="n">noise_</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span>1<span class="nb">j</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">sig_rx</span><span class="w">  </span><span class="p">=</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">noise_</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%compute likelihood</span><span class="w"></span>
+<span class="w">    </span><span class="n">xref</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">Constellation</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Ns</span><span class="p">);</span><span class="w">       </span><span class="c">%</span><span class="w"></span>
+<span class="w">    </span><span class="n">d2</span><span class="p">=</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="nb">repmat</span><span class="p">(</span><span class="n">sig_rx</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="n">xref</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYX</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c">%LLRs without a priori</span><span class="w"></span>
+<span class="w">    </span><span class="n">LLRs</span><span class="p">=</span><span class="nb">log</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">BinaryTable</span><span class="o">&#39;</span><span class="p">)</span><span class="o">*</span><span class="n">PYX</span><span class="p">)</span><span class="o">-</span><span class="nb">log</span><span class="p">(</span><span class="n">BinaryTable</span><span class="o">&#39;*</span><span class="n">PYX</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Hard decisions</span><span class="w"></span>
+<span class="w">    </span><span class="n">bhat</span><span class="p">=(</span><span class="mi">1</span><span class="o">-</span><span class="nb">sign</span><span class="p">(</span><span class="n">LLRs</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%bits</span><span class="w"></span>
+<span class="w">    </span><span class="n">bits</span><span class="p">=</span><span class="n">de2bi</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">)</span><span class="o">&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PYX =
+
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.2226    0.0241    0.0000    0.0000    0.0000
+    0.0001    0.0000    0.0000    0.0000    0.0000    0.5733    0.0001    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.5943    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0962    0.0000    0.0000    0.0007    0.0000    0.0000    0.0000    0.0000
+    0.0424    0.0000    0.0000    0.0000    0.0000    0.0028    0.7619    0.0000    0.0000    0.0000
+    0.2970    0.0000    0.0000    0.0000    0.0000    0.0073    0.0023    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0984    0.0071    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000
+    0.0010    0.0000    0.0159    0.0141    0.0000    0.0000    0.0000    0.0000    0.0002    0.0001
+    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.3149    0.0000    0.0000
+    0.0002    0.0000    0.0000    0.0000    0.0000    0.0000    0.0000    0.0163    0.0195    0.0008
+    0.0000    0.4640    0.0000    0.0050    0.6873    0.0000    0.0000    0.0000    0.0039    0.0588
+    0.0000    0.0004    0.0000    0.0100    0.0593    0.0000    0.0000    0.0000    0.3867    0.2994
+    0.0458    0.0000    0.0000    0.0000    0.0000    0.0000    0.0121    0.0001    0.0000    0.0000
+    0.3209    0.0000    0.0000    0.0005    0.0000    0.0000    0.0000    0.0000    0.0179    0.0007
+    0.0000    0.0048    0.0000    0.2643    0.0022    0.0000    0.0000    0.0000    0.0035    0.0528
+    0.0011    0.0000    0.0000    0.5297    0.0002    0.0000    0.0000    0.0000    0.3549    0.2687
+
+
+LLRs =
+
+   -0.0774  -16.7382   11.3448   -3.6424  -19.1325   16.3323    4.1707  -23.4011   -8.4175   -8.4518
+   -7.5890    4.5664    1.7982   -3.9976    5.7672    4.3623   -3.4711    7.9029    0.0852    0.1077
+    5.7814  -21.8461  -11.3867   -7.3044  -12.5780    6.9771   19.1993   13.5678   -2.9975   -6.1464
+   -1.9504    7.1252    1.8208   -0.6963    2.4501   -0.9473    5.8007    2.9612   -4.6564   -1.6304
+
+
+bhat =
+
+     1     1     0     1     1     0     0     1     1     1
+     1     0     0     1     0     0     1     0     0     0
+     0     1     1     1     1     0     0     0     1     1
+     1     0     0     1     0     1     0     0     1     1
+
+
+bits =
+
+     1     1     0     1     1     0     0     1     1     1
+     1     1     0     1     0     0     1     0     1     1
+     0     1     1     1     1     0     0     0     1     1
+     1     0     0     0     0     1     0     0     1     1
+</pre></div>
+</div>
+<img alt="_images/BICM_1_1.png" src="_images/BICM_1_1.png" />
+</div>
+</div>
+</section>
+<section id="capacite-bicm">
+<h2><span class="section-number">2.6.2. </span>2. Capacité BICM<a class="headerlink" href="#capacite-bicm" title="Permalink to this headline">#</a></h2>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{bicm}}=m-\frac{1}{2}\sum_{k=0}^{m-1}\sum_{c=0}^{1}{\mathbb{E}\left( \log_2{\left(\frac{\sum_{s_i \in \mathcal{S}}{p(y|s_i)}}{\sum_{s_j \in \mathcal{S}_c^k}{p(y|s_j)}} \right)}\right)}\]</div>
+<p>On peut montrer la formule suivante, plus commode à utiliser et interpréter :</p>
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{bicm}}=\sum_{k=1}^m I({X_k},{Y}) \leq C_{AWGN},\]</div>
+<p>où <span class="math notranslate nohighlight">\(I({X_k},{Y})=1-\mathbb{E}_{X_k,Y}{(\log_2(1+e^{-(1-2 X_k)L(X_k)}))}.\)</span> <span class="math notranslate nohighlight">\(I({X_k},{Y})\)</span> est la capacité binaire associée au canal <span class="math notranslate nohighlight">\(k\)</span>. Notons également que <span class="math notranslate nohighlight">\(L(X_k)\)</span> est une fonction implicite de <span class="math notranslate nohighlight">\(Y.\)</span> A partir de ces expressions, on peut alors facilement calculer une estimée</p>
+<div class="math notranslate nohighlight">
+\[\hat{I}({X_k},{Y})=1-\frac{1}{N_k} \sum_n{(\log_2(1+e^{-(1-2 x_k[n])L(x_k[n])}))}.\]</div>
+<p>En général pour les modulations linéaires, le mapping de Gray permet d’être quasi-optimal pour les efficacités moyennes à grandes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Simulation parameters</span><span class="w"></span>
+<span class="n">Ns</span><span class="p">=</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w">                  </span><span class="c">% Number of Symbols </span><span class="w"></span>
+<span class="n">Es_N0_dB</span><span class="w"> </span><span class="p">=</span><span class="w">  </span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">40</span><span class="p">);</span><span class="w"></span>
+
+<span class="c">%loop for order M</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="mi">256</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w">                     </span><span class="c">% Constellation Order</span><span class="w"></span>
+<span class="n">Constellation</span><span class="p">=</span><span class="n">qammod</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="n">BinaryTable</span><span class="p">=</span><span class="n">de2bi</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="c">% Loop variable for SNR</span><span class="w"></span>
+<span class="c">% Monte carlo parameter</span><span class="w"></span>
+<span class="w">    </span>
+<span class="k">for</span><span class="w"> </span><span class="n">snr</span><span class="p">=</span><span class="mi">1</span><span class="p">:</span><span class="nb">numel</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c">%generate M-QAM modulation</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">randi</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Ns</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">qammod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Es_N0</span><span class="p">=</span><span class="mi">10</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="c">%normal</span><span class="w"></span>
+<span class="w">    </span><span class="n">sigx2</span><span class="p">=</span><span class="nb">var</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">N0</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">sigx2</span><span class="w"> </span><span class="o">/</span><span class="p">(</span><span class="n">Es_N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%add noise</span><span class="w"></span>
+<span class="w">    </span><span class="n">noise_</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span>1<span class="nb">j</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sig_rx</span><span class="w">  </span><span class="p">=</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">noise_</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Compute Capacity</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">Hx</span><span class="p">=</span><span class="nb">log2</span><span class="p">(</span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Conditionnal Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">xref</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">Constellation</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Ns</span><span class="p">);</span><span class="w">       </span><span class="c">%</span><span class="w"></span>
+<span class="w">    </span><span class="n">d2</span><span class="p">=</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="nb">repmat</span><span class="p">(</span><span class="n">sig_rx</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">).</span><span class="o">&#39;-</span><span class="n">xref</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYX</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">d2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYx</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="n">sig_rx</span><span class="o">-</span><span class="n">Constellation</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PxY</span><span class="p">=</span><span class="n">PYx</span><span class="o">./</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">PYX</span><span class="p">)</span><span class="o">&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">HXY</span><span class="p">=</span><span class="o">-</span><span class="nb">mean</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="n">PxY</span><span class="o">&#39;</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">ConstrainedCapacity</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="n">Hx</span><span class="o">-</span><span class="n">HXY</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Binary Capacity</span><span class="w"></span>
+<span class="w">    </span><span class="n">LLRs</span><span class="p">=</span><span class="nb">log</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">BinaryTable</span><span class="o">&#39;</span><span class="p">)</span><span class="o">*</span><span class="n">PYX</span><span class="p">)</span><span class="o">-</span><span class="nb">log</span><span class="p">(</span><span class="n">BinaryTable</span><span class="o">&#39;*</span><span class="n">PYX</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">bits</span><span class="p">=</span><span class="n">de2bi</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">)</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">BICMCapa</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="nb">log2</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nb">numel</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">LLRs</span><span class="p">(:)</span><span class="o">.*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">bits</span><span class="p">(:))))));</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="n">ConstrainedCapacity</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">hold</span><span class="w"> </span><span class="s">on</span><span class="w"> </span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="n">BICMCapa</span><span class="p">,</span><span class="s">&#39;--&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="o">/</span><span class="mi">10</span><span class="p">)),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">%legend({&#39;M=4&#39;,&#39;M=4&#39;,&#39;M=16&#39;,&#39;M=64&#39;,&#39;M=256&#39;,&#39;M=1024&#39;,&#39;Gaussian&#39;},&#39;Location&#39;,&#39;northwest&#39;)</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0 dB&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity in bpcu&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/BICM_3_1.png" src="_images/BICM_3_1.png" />
+</div>
+</div>
+<p>On voit alors que le schéma BICM est quasi optimal pour une modulation de type Gray pour les rendements moyen à fort. Il reste une perte par rapport à la capacité de la modulation codée pour les rendements  faibles.</p>
+<p>Si on considère maintenant une modulation de type non Gray (ici mapping binaire naturel) alors on voit que la perte est importante.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Simulation parameters</span><span class="w"></span>
+<span class="n">Ns</span><span class="p">=</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w">                  </span><span class="c">% Number of Symbols </span><span class="w"></span>
+<span class="n">Es_N0_dB</span><span class="w"> </span><span class="p">=</span><span class="w">  </span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">40</span><span class="p">);</span><span class="w"></span>
+
+<span class="c">%loop for order M</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="mi">256</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w">                     </span><span class="c">% Constellation Order</span><span class="w"></span>
+<span class="n">Constellation</span><span class="p">=</span><span class="n">qammod</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="s">&#39;bin&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="n">BinaryTable</span><span class="p">=</span><span class="n">de2bi</span><span class="p">((</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&#39;</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="c">% Loop variable for SNR</span><span class="w"></span>
+<span class="c">% Monte carlo parameter</span><span class="w"></span>
+<span class="w">    </span>
+<span class="k">for</span><span class="w"> </span><span class="n">snr</span><span class="p">=</span><span class="mi">1</span><span class="p">:</span><span class="nb">numel</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="c">%generate M-QAM modulation</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">randi</span><span class="p">([</span><span class="mi">0</span><span class="w"> </span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Ns</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">qammod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">,</span><span class="s">&#39;bin&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Es_N0</span><span class="p">=</span><span class="mi">10</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span><span class="c">%normal</span><span class="w"></span>
+<span class="w">    </span><span class="n">sigx2</span><span class="p">=</span><span class="nb">var</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">N0</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="n">sigx2</span><span class="w"> </span><span class="o">/</span><span class="p">(</span><span class="n">Es_N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%add noise</span><span class="w"></span>
+<span class="w">    </span><span class="n">noise_</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="w"> </span><span class="k">...</span><span class="w"></span>
+<span class="w">                </span>1<span class="nb">j</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">N0</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">)</span><span class="o">*</span><span class="nb">randn</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sig_rx</span><span class="w">  </span><span class="p">=</span><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">noise_</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Compute Capacity</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">Hx</span><span class="p">=</span><span class="nb">log2</span><span class="p">(</span><span class="n">M</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c">%%Conditionnal Entropy</span><span class="w"></span>
+<span class="w">    </span><span class="n">xref</span><span class="p">=</span><span class="nb">repmat</span><span class="p">(</span><span class="n">Constellation</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Ns</span><span class="p">);</span><span class="w">       </span><span class="c">%</span><span class="w"></span>
+<span class="w">    </span><span class="n">d2</span><span class="p">=</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="nb">repmat</span><span class="p">(</span><span class="n">sig_rx</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">).</span><span class="o">&#39;-</span><span class="n">xref</span><span class="p">))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYX</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="n">d2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PYx</span><span class="p">=</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">((</span><span class="n">sig_rx</span><span class="o">-</span><span class="n">Constellation</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span><span class="o">.^</span><span class="mi">2</span><span class="o">/</span><span class="n">N0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">PxY</span><span class="p">=</span><span class="n">PYx</span><span class="o">./</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">PYX</span><span class="p">)</span><span class="o">&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">HXY</span><span class="p">=</span><span class="o">-</span><span class="nb">mean</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="n">PxY</span><span class="o">&#39;</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">ConstrainedCapacity</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="n">Hx</span><span class="o">-</span><span class="n">HXY</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">%Binary Capacity</span><span class="w"></span>
+<span class="w">    </span><span class="n">LLRs</span><span class="p">=</span><span class="nb">log</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">BinaryTable</span><span class="o">&#39;</span><span class="p">)</span><span class="o">*</span><span class="n">PYX</span><span class="p">)</span><span class="o">-</span><span class="nb">log</span><span class="p">(</span><span class="n">BinaryTable</span><span class="o">&#39;*</span><span class="n">PYX</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">bits</span><span class="p">=</span><span class="n">de2bi</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="s">&#39;left-msb&#39;</span><span class="p">)</span><span class="o">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">BICMCapa</span><span class="p">(</span><span class="n">snr</span><span class="p">)=</span><span class="nb">log2</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nb">numel</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="nb">exp</span><span class="p">(</span><span class="o">-</span><span class="n">LLRs</span><span class="p">(:)</span><span class="o">.*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">bits</span><span class="p">(:))))));</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="n">ConstrainedCapacity</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">hold</span><span class="w"> </span><span class="s">on</span><span class="w"> </span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="n">BICMCapa</span><span class="p">,</span><span class="s">&#39;--&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nb">plot</span><span class="p">(</span><span class="n">Es_N0_dB</span><span class="p">,</span><span class="nb">log2</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">10.</span>^<span class="p">(</span><span class="n">Es_N0_dB</span><span class="o">/</span><span class="mi">10</span><span class="p">)),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="c">%legend({&#39;M=4&#39;,&#39;M=4&#39;,&#39;M=16&#39;,&#39;M=64&#39;,&#39;M=256&#39;,&#39;M=1024&#39;,&#39;Gaussian&#39;},&#39;Location&#39;,&#39;northwest&#39;)</span><span class="w"></span>
+<span class="nb">xlabel</span><span class="p">(</span><span class="s">&#39;E_s/N_0 dB&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">ylabel</span><span class="p">(</span><span class="s">&#39;Capacity in bpcu&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="nb">grid</span><span class="w"> </span><span class="n">on</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<img alt="_images/BICM_5_1.png" src="_images/BICM_5_1.png" />
+</div>
+</div>
+<p><strong>En règle générale, pour les modulation linéaire, le mapping de Gray est optimal pour un système BICM (au sens où il permet de maximiser la capacité BICM).</strong></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "matlab"
+        },
+        kernelOptions: {
+            kernelName: "matlab",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'matlab'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch2sec5.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2.5. </span>Démodulation MAP bit et systèmes BICM.</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ch3intro.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Codes convolutifs : structure et décodage</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

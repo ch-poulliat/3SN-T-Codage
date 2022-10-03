@@ -1,0 +1,782 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>1.5. Capacité d’un canal de transmission &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1.6. Exemples de calcul de la capacité en Matlab" href="PlayWithCapacity.html" />
+    <link rel="prev" title="1.4. Information mutuelle" href="ch1sec2.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec3.html">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fch1sec3.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch1sec3.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#definition">
+   1.5.1. Définition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exemples-de-canaux-a-entrees-et-sorties-discretes-sans-memoire">
+   1.5.2. Exemples de canaux à entrées et sorties discrètes sans mémoire
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exemples-de-canaux-a-entrees-continues-et-sorties-continues">
+   1.5.3. Exemples de Canaux à entrées continues et sorties continues
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#canaux-a-entrees-discretes-et-sorties-continues">
+   1.5.4. Canaux à entrées discrètes et sorties continues
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#capacite-a-entrees-contraintes">
+     1.5.4.1. Capacité à entrées contraintes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#calcul-numerique-de-la-capacite">
+   1.5.5. Calcul numérique de la capacité
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Capacité d’un canal de transmission</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#definition">
+   1.5.1. Définition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exemples-de-canaux-a-entrees-et-sorties-discretes-sans-memoire">
+   1.5.2. Exemples de canaux à entrées et sorties discrètes sans mémoire
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exemples-de-canaux-a-entrees-continues-et-sorties-continues">
+   1.5.3. Exemples de Canaux à entrées continues et sorties continues
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#canaux-a-entrees-discretes-et-sorties-continues">
+   1.5.4. Canaux à entrées discrètes et sorties continues
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#capacite-a-entrees-contraintes">
+     1.5.4.1. Capacité à entrées contraintes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#calcul-numerique-de-la-capacite">
+   1.5.5. Calcul numérique de la capacité
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="capacite-d-un-canal-de-transmission">
+<h1><span class="section-number">1.5. </span>Capacité d’un canal de transmission<a class="headerlink" href="#capacite-d-un-canal-de-transmission" title="Permalink to this headline">#</a></h1>
+<section id="definition">
+<h2><span class="section-number">1.5.1. </span>Définition<a class="headerlink" href="#definition" title="Permalink to this headline">#</a></h2>
+<p>Soit <span class="math notranslate nohighlight">\(X \in \mathcal{X}\)</span> le symbole émis et <span class="math notranslate nohighlight">\(Y \in \mathcal{Y}\)</span>, la sortie observée du canal de transmission supposé sans mémoire
+caractérisé par la probabilité de transition <span class="math notranslate nohighlight">\(P(Y|X)\)</span> alors on à la définition suivante</p>
+<div class="proof definition admonition" id="definition-0">
+<p class="admonition-title"><span class="caption-number">Definition 1.9 </span> (Capacité d’un canal discret sans mémoire)</p>
+<section class="definition-content" id="proof-content">
+<p>La capacité d’un canal sans mémoire est donnée par</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathbf{C} &amp; =  \max_{p(X)}{\boldsymbol{\mathbf{I}}(X;Y)} \\
+&amp; =  \max_{p(X)}{\boldsymbol{\mathbf{H}}(X) -\boldsymbol{\mathbf{H}}(X|Y)} = \max_{p(X)}{\boldsymbol{\mathbf{H}}(Y) -\boldsymbol{\mathbf{H}}(Y|X)} \nonumber
+\end{aligned}\end{split}\]</div>
+<p>Max. atteint pour distribution uniforme pour les canaux <em>symétriques</em>.</p>
+</section>
+</div><p>Cette quantité représente le débit maximum atteignable avec un probabilité arbitrairement faible par un canal de transmission donné par <span class="math notranslate nohighlight">\(P(Y|X).\)</span> Il est mesuré en bit par symbole, souvent noté bpcu (bit per channel use).</p>
+</section>
+<section id="exemples-de-canaux-a-entrees-et-sorties-discretes-sans-memoire">
+<h2><span class="section-number">1.5.2. </span>Exemples de canaux à entrées et sorties discrètes sans mémoire<a class="headerlink" href="#exemples-de-canaux-a-entrees-et-sorties-discretes-sans-memoire" title="Permalink to this headline">#</a></h2>
+<div class="proof example admonition" id="example-1">
+<p class="admonition-title"><span class="caption-number">Example 1.2 </span> (Canal à effacement )</p>
+<section class="example-content" id="proof-content">
+<p>Le canal à effacement (binary erausre channel, BEC) est un exemple simple de canaux sans mémoire à entrée binaire et sortie ternaire. c’est
+une modélisation simple d’un canal de type <em>“internet”</em> (effacement des paquet à l’aide de CRC quand intégrité du paquet n’est pas assurée).
+Ainsi chaque bit <span class="math notranslate nohighlight">\(X\)</span> émis <span class="math notranslate nohighlight">\('0'\)</span> ou <span class="math notranslate nohighlight">\('1'\)</span> est soit reçu sans erreur avec ne probabilité <span class="math notranslate nohighlight">\(1-\epsilon\)</span> ou considéré comme effacé, noté <span class="math notranslate nohighlight">\(E\)</span>, avec
+une probabilité <span class="math notranslate nohighlight">\(\epsilon.\)</span> On peut alors montrer que la capacité de cecanal se résume à</p>
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{BEC}}=1-\epsilon.\]</div>
+</section>
+</div><div class="proof example admonition" id="example-2">
+<p class="admonition-title"><span class="caption-number">Example 1.3 </span> (Canal binaire symétrique)</p>
+<section class="example-content" id="proof-content">
+<p>Le canal binaire symétrique à erreurs (binary symetric channel, BSC) est un canal qui modélise les erreurs dans le domaine décidé, et donc sous
+décision dure au récepteur (hard decision). Dans ce cas, le bit <span class="math notranslate nohighlight">\(X\)</span> est reçu coorectement avec un probabilité <span class="math notranslate nohighlight">\(1-p\)</span> ou erroné avec une probabilité <span class="math notranslate nohighlight">\(p\)</span>, où <span class="math notranslate nohighlight">\(p\)</span> est a probabilité d’erreur bit ou <em>“taux de flip”</em> Dan ce cas la capacité est donnée par</p>
+<div class="math notranslate nohighlight">
+\[C_{\mathrm{BSC}}=1-\mathrm{H}_{\mathrm{b}}(p)\]</div>
+</section>
+</div></section>
+<section id="exemples-de-canaux-a-entrees-continues-et-sorties-continues">
+<h2><span class="section-number">1.5.3. </span>Exemples de Canaux à entrées continues et sorties continues<a class="headerlink" href="#exemples-de-canaux-a-entrees-continues-et-sorties-continues" title="Permalink to this headline">#</a></h2>
+<p>Pour des entrées et sorties à densités continues, l’expression générale de l’information mutuelle est donnée par</p>
+<div class="math notranslate nohighlight">
+\[I(X ; Y)=\int p(x, y) \log \frac{p(x, y)}{p(x) p(y)} d x d y.\]</div>
+<p>La capacité est alors obtenue pour un canal donné par maximisation sur la densité de la variable en entrée de canal. Parmi les canaux
+d’intérêt, on a le canal Gaussien à temps continu qui est un des cas de canal continu adressé par Shannon à l’origine. Dans ce modèle, le
+signal observé <span class="math notranslate nohighlight">\(y(t)\)</span> est une version bruité du signal envoyé <span class="math notranslate nohighlight">\(x(t)\)</span> est un signal de puissance <span class="math notranslate nohighlight">\(P\)</span> et à bande limitée <span class="math notranslate nohighlight">\(W=1/T,\)</span> où <span class="math notranslate nohighlight">\(T\)</span> est le
+temps symbole. Le modèle continue est alors le suivant</p>
+<div class="math notranslate nohighlight">
+\[y(t)=x(t)+b(t).\]</div>
+<p>où <span class="math notranslate nohighlight">\(b(t)\)</span> est un processus Gaussien complexe de densité spectrale bilatérale de bruit <span class="math notranslate nohighlight">\(N_0.\)</span> On définit alors le rapport signal-sur-bruit par</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{SNR} \triangleq \frac{P}{\mathrm{N}_{0} W}.\]</div>
+<p>On peut alors donner la capacité associée à ce canal par la proposition suivante (preuve admise).</p>
+<div class="proof definition admonition" id="definition-3">
+<p class="admonition-title"><span class="caption-number">Definition 1.10 </span> (Capacité d’un canal Gaussien à temps continu)</p>
+<section class="definition-content" id="proof-content">
+<p>La capacité d’un canal Gaussien à temps continu et bande limitée <span class="math notranslate nohighlight">\(W\)</span> est
+donnée par</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{C}_{\mathrm{AWGN}-\mathrm{C}}=W \log_2 (1+\mathrm{SNR})[\mathrm{bits} / \mathrm{s}]\]</div>
+<p>où</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{SNR} \triangleq \frac{P}{\mathrm{N}_{0} W}.\]</div>
+<p><span class="math notranslate nohighlight">\(P\)</span> est la puissance d’émission de <span class="math notranslate nohighlight">\(X\)</span> et <span class="math notranslate nohighlight">\(N_0\)</span> est la densité spectrale bilatérale du bruit. La capacité est atteinte pour une distribution Gaussienne de
+l’entrée <span class="math notranslate nohighlight">\(X.\)</span></p>
+</section>
+</div><p>Un modèle plus simple a abordé mais cependant équivalent sous certaines conditions est le modèle du canal Gaussien à temps discret. Celui-ci
+correspond à une version discrétisée du canal précédent. Ainsi, on obtient le modèle discret suivant, ie. pour tout instant symbole <span class="math notranslate nohighlight">\(n,\)</span> on
+a</p>
+<div class="math notranslate nohighlight">
+\[y[n]=x[n]+b[n],\]</div>
+<p>où <span class="math notranslate nohighlight">\(b[n]\)</span> suit une loi normal complexe circulaire, <span class="math notranslate nohighlight">\(\mathcal{CN}(0,N_0).\)</span> La loi de transition du canal s’écrit alors</p>
+<div class="math notranslate nohighlight">
+\[p(y|x) \propto e^{-\frac{\vert y-x \vert^2}{N_0}}.\]</div>
+<p>On peut alors démontrer la proposition suivante:</p>
+<div class="proof definition admonition" id="definition-4">
+<p class="admonition-title"><span class="caption-number">Definition 1.11 </span> (Capacité d’un canal Gaussien à temps discret)</p>
+<section class="definition-content" id="proof-content">
+<p>La capacité d’un canal Gaussien à temps discret réel avec une énergie moyenne par symbole <span class="math notranslate nohighlight">\(\mathrm{E}_{\mathrm{s}}\)</span> et une variance par
+dimension <span class="math notranslate nohighlight">\(\sigma^{2}=\mathrm{No} / 2\)</span> est donnée par</p>
+<div class="math notranslate nohighlight">
+\[C_{\text {AWGN}}=\frac{1}{2} \log \left(1+\frac{E_{s}}{\sigma^{2}}\right) \text { [bits/channel use] or [bits/symbol], }\]</div>
+<p>Cette capacité est atteinte pour <span class="math notranslate nohighlight">\(X \sim \mathcal{N}\left(0, \mathrm{E}_{\mathrm{s}}\right).\)</span></p>
+<p>Pareillement, La capacité d’un canal Gaussien complexe à temps discret avec une énergie moyenne par symbole <span class="math notranslate nohighlight">\(\mathrm{E}_{\mathrm{s}}\)</span> et une
+variance par dimension <span class="math notranslate nohighlight">\(\sigma^{2}=\mathrm{No} / 2\)</span> est donnée par</p>
+<div class="math notranslate nohighlight">
+\[C_{AWGN}=\log \left(1+\frac{E_{s}}{2 \sigma^{2}}\right)=\log \left(1+\frac{E_{s}}{N_0}\right) \text { [bits/channel use] or [bits/symbol], }\]</div>
+</section>
+</div><p>La partie <em>“difficile”</em> de la preuve (non détaillée ici) reste de montrer que le maximum est atteint pour une distribution gaussienne. Une
+fois ceci établi, la preuve fait appel aux expressions simples de l’entropie de variables aléatoires gaussiennes.</p>
+<p>En remarquant que <span class="math notranslate nohighlight">\(W=1/T,\)</span> on obtient <span class="math notranslate nohighlight">\(P=\mathrm{E}_{\mathrm{s}} W.\)</span> Le lien entre les deux régimes est alors donné par la relation suivante :</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{C}_{\mathrm{AWGN}-\mathrm{C}}=W * C_{AWGN}.\]</div>
+<p>On remarque alors que <span class="math notranslate nohighlight">\(\mathrm{C}_{\mathrm{AWGN}-\mathrm{C}}\)</span> est homogène à un débit alors que <span class="math notranslate nohighlight">\(\mathrm{C}_{\mathrm{AWGN}}\)</span> est homogène à une
+efficacité spectrale en <span class="math notranslate nohighlight">\(bit/s/Hz.\)</span></p>
+<p>Pour les <span class="math notranslate nohighlight">\(E_s/N_0\)</span> faibles (régime limité en puissance), on a</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathrm{C}_{\textrm{AWGN }} &amp;=\log_2(1+E_s/N_0) \\
+&amp;\approx \frac{1}{\ln 2} \cdot E_s/N_0.
+\end{aligned}\end{split}\]</div>
+<p>On a donc un régime linéaire. A contrario, pour les forts <span class="math notranslate nohighlight">\(E_s/N_0,\)</span> on a un régime logarithmique, ie.
+$<span class="math notranslate nohighlight">\(\mathrm{C}_{\textrm{AWGN }} \approx \log_2(E_s/N_0)\)</span>$</p>
+</section>
+<section id="canaux-a-entrees-discretes-et-sorties-continues">
+<h2><span class="section-number">1.5.4. </span>Canaux à entrées discrètes et sorties continues<a class="headerlink" href="#canaux-a-entrees-discretes-et-sorties-continues" title="Permalink to this headline">#</a></h2>
+<section id="capacite-a-entrees-contraintes">
+<h3><span class="section-number">1.5.4.1. </span>Capacité à entrées contraintes<a class="headerlink" href="#capacite-a-entrees-contraintes" title="Permalink to this headline">#</a></h3>
+<p>On considère maintenant des canaux à entrées discrètes. Ceci représente le cas d’usage le plus fréquent en communications numériques où les
+symboles émis appartiennent à des constellations à des alphabets finis comme les modulations de type PAM, QAM ou encore PSK/APSK. Dans ce cas,
+l’information mutuelle s’écrit comme suit</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{I}(X ; Y)=\sum_{x \in \mathcal{X}} \int p(x, y) \log_2 \frac{p(x, y)}{p(x) p(y)} d y,\]</div>
+<p>avec <span class="math notranslate nohighlight">\(p(x,y)=p(y|x)p(x)\)</span> et <span class="math notranslate nohighlight">\(p(y)=\sum_x p(y|x) p(x).\)</span></p>
+<p>La capacité associée à ce type d’entrées en souvent appelée <em><strong>capacité à entrées contraintes (constrained input capacity)</strong></em>.  Si on considère des entrées contraintes avec une distribution uniforme des symboles d’entrée, avec <span class="math notranslate nohighlight">\(|\mathcal{X}|=M,\)</span> on aura <span class="math notranslate nohighlight">\(p(x)=1/M, \forall x \in \mathcal{X},\)</span> et on a donc l’expression suivante</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{C}=\mathrm{I}(X ; Y)=\frac{1}{M}\sum_{x \in\mathcal{X}}\int p(y|x) \log_2 \frac{p(y|x)}{\frac{1}{M} \sum_x p(y|x)} dy.\]</div>
+</section>
+</section>
+<section id="calcul-numerique-de-la-capacite">
+<h2><span class="section-number">1.5.5. </span>Calcul numérique de la capacité<a class="headerlink" href="#calcul-numerique-de-la-capacite" title="Permalink to this headline">#</a></h2>
+<p>Contrairement au cas Gaussien à entrées continues, il n’existe pas d’expression analytique plus simple que cette formulation intégrale. Il faut donc pour un canal particulier calculer l’expression intégrale par <em>intégration numérique</em> ou de <em>Monte-Carlo</em>. Calculer la capacité revient à évaluer</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{C} = \boldsymbol{\mathbf{I}}(X;Y) = \boldsymbol{\mathbf{H}}(X)-\boldsymbol{\mathbf{H}}(X|Y)\]</div>
+<p>au travers des Termes <span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X)\)</span> et <span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X|Y).\)</span></p>
+<p>Voilà alors les différentes étapes pour calculer la capacité “numériquement” :</p>
+<ul>
+<li><p><em><strong>Calcul de <span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X)\)</span> :</strong></em></p>
+<p>En considérant une distribution  uniforme des symboles d’entrée, on obtient facilement que</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X)=\log_2(M).\]</div>
+</li>
+<li><p><em><strong>Calcul de <span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X|Y)\)</span> :</strong></em></p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X|Y)= - \boldsymbol{\mathbb{E}}(\log_2{p(X | Y)}) =  \boldsymbol{\mathbb{E}}(h(X | Y))\]</div>
+<p>On doit donc calculer le terme <span class="math notranslate nohighlight">\(h(X | Y)=-\log_2{(p(X | Y))}.\)</span> Ceci est aisément obtenu en considérant la vraisemblance du canal de la
+manière suivante</p>
+<div class="math notranslate nohighlight">
+\[p(X | Y) =  \frac{p(Y|X)}{\sum_{x \in \mathcal{X}}{p(Y|X=x)}}.\]</div>
+<p>Le calcul de <span class="math notranslate nohighlight">\(\boldsymbol{\mathbf{H}}(X|Y)\)</span> peut alors se faire par Monte-Carlo en utilisant un estimateur asymptotiquement sans biais
+de cette quantité. En effet, par ergodicité, on a</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{\mathbf{H}}(X|Y)= \boldsymbol{\mathbb{E}}({h(X | Y)}) = \lim_{N \rightarrow +\infty}\frac{1}{N} \sum_{n}{h(x(n)| y(n))}\]</div>
+<p>où <span class="math notranslate nohighlight">\(h(x(n)| y(n))=\log_2(p(x(n) | y(n)))).\)</span></p>
+<p>La procédure globale pour l’estimation par monte-Carlo peut alors se résumer comme suit</p>
+<ol class="simple">
+<li><p>Tirer aléatoirement et uniformément des symboles issus de la constellation d’intérêt,</p></li>
+<li><p>Calculer pour chaque couple <span class="math notranslate nohighlight">\((x(n),y(n))\)</span> <span class="math notranslate nohighlight">\(h(x(n) | y(n))\)</span> et moyenner.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch1sec2.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">1.4. </span>Information mutuelle</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="PlayWithCapacity.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.6. </span>Exemples de calcul de la capacité en Matlab</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

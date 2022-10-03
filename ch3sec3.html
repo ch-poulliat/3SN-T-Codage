@@ -1,0 +1,875 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>3.3. Décodage par Maximum de Vraisemblance &#8212; Codage et détection avancés</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3.4. Décodage MAP symbole" href="ch3sec4.html" />
+    <link rel="prev" title="3.2. Représentations" href="ch3sec2.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/N7solo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Codage et détection avancés</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Bienvenue au cours de codage et détection avancés.
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch1intro.html">
+   1. Introduction à la théorie de l’information
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec1.html">
+     1.3. Mesure de l’information : notion d’entropie
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec2.html">
+     1.4. Information mutuelle
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec3.html">
+     1.5. Capacité d’un canal de transmission
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PlayWithCapacity.html">
+     1.6. Exemples de calcul de la capacité en Matlab
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch1sec4.html">
+     1.7. Théorème du codage canal
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch2intro.html">
+   2. Codage de canal - critère de décodage
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec1.html">
+     2.1. Codes en blocs linéaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec2.html">
+     2.2. Critères de décodage séquence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec3.html">
+     2.3. Notions d’information souple
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec4.html">
+     2.4. Décodage MAP bit/symbole pour un code en bloc
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch2sec5.html">
+     2.5. Démodulation MAP bit et systèmes BICM.
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="BICM.html">
+     2.6. Exemple Matlab : Systèmes BICM
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ch3intro.html">
+   3. Codes convolutifs : structure et décodage
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec1.html">
+     3.1. Un exemple: le code
+     <span class="math notranslate nohighlight">
+      \((5,7)_8\)
+     </span>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec2.html">
+     3.2. Représentations
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     3.3. Décodage par Maximum de Vraisemblance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch3sec4.html">
+     3.4. Décodage MAP symbole
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch4intro.html">
+   4. Concaténation de codes en treillis : Turbo-codes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec1.html">
+     4.1. Turbo-codes parallèles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch4sec2.html">
+     4.2. Turbo-codes série
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ch5intro.html">
+   5. Codes LDPC
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec1.html">
+     5.1. Codes LDPC binaires
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec2.html">
+     5.2. Décodage par propagation de croyance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ch5sec3.html">
+     5.3. Encodage
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="biblio.html">
+   6. Bibliographie
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fch3sec3.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch3sec3.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#critere-de-decodage-mlse">
+   3.3.1. Critère de décodage MLSE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#algorithme-de-viterbi">
+   3.3.2. Algorithme de Viterbi
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-dures-hard-inputs-hi">
+     3.3.2.1. Cas du décodage à entrées dures (Hard Inputs (HI))
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples">
+     3.3.2.2. Cas du décodage à entrées “souples”
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-sur-canal-gaussien">
+     3.3.2.3. Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation
+     <span class="math notranslate nohighlight">
+      \(M\)
+     </span>
+     -aire sur canal Gaussien.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-a-bits-entrelaces-sur-canal-gaussien">
+     3.3.2.4. Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation
+     <span class="math notranslate nohighlight">
+      \(M\)
+     </span>
+     -aire à bits entrelacés sur canal Gaussien
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Décodage par Maximum de Vraisemblance</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#critere-de-decodage-mlse">
+   3.3.1. Critère de décodage MLSE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#algorithme-de-viterbi">
+   3.3.2. Algorithme de Viterbi
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-dures-hard-inputs-hi">
+     3.3.2.1. Cas du décodage à entrées dures (Hard Inputs (HI))
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples">
+     3.3.2.2. Cas du décodage à entrées “souples”
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-sur-canal-gaussien">
+     3.3.2.3. Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation
+     <span class="math notranslate nohighlight">
+      \(M\)
+     </span>
+     -aire sur canal Gaussien.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-a-bits-entrelaces-sur-canal-gaussien">
+     3.3.2.4. Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation
+     <span class="math notranslate nohighlight">
+      \(M\)
+     </span>
+     -aire à bits entrelacés sur canal Gaussien
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="decodage-par-maximum-de-vraisemblance">
+<h1><span class="section-number">3.3. </span>Décodage par Maximum de Vraisemblance<a class="headerlink" href="#decodage-par-maximum-de-vraisemblance" title="Permalink to this headline">#</a></h1>
+<p>Dans cette section, on s’intéresse au décodage par maximum de vraisemblance (ou encore appelé <em>MLSE</em>) comme défini auparavant. Onexplicite ici comment ce type de décodage s’instantie dans le cas des codes convolutifs.</p>
+<section id="critere-de-decodage-mlse">
+<h2><span class="section-number">3.3.1. </span>Critère de décodage MLSE<a class="headerlink" href="#critere-de-decodage-mlse" title="Permalink to this headline">#</a></h2>
+<p>Pour rappel, le critère MLSE se décline toujours sous la forme</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \max_{{\bf c}}{p({\bf y} | {\bf  c})} \nonumber \\
+&amp;=&amp;  \mathrm{arg} \max_{{\bf c}}{\prod_n{p(y_n | {c_n})}} \nonumber \\
+\end{aligned}\end{split}\]</div>
+<p>La dernière égalité venant du fait que l’on considère une canal sans mémoire à entrées antipodales (BPSK) pour première présentation. Si on considère un code convolutif avec fermeture de treillis avec un treillis comportant <span class="math notranslate nohighlight">\(L\)</span> sections, et en reprenant les notations précédentes sur les codes convolutits, on peur alors écrire</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \max_{{\bf c}}{\prod_{k=1}^L{p({ \bf y_k} | {\bf c_k})}} \nonumber 
+\end{aligned}\]</div>
+<p>où <span class="math notranslate nohighlight">\({ \bf y_k}=(y_k^{(1)}, \cdots, y_k^{(n_c)})\)</span> et <span class="math notranslate nohighlight">\({ \bf c_k}=(c_k^{(1)}, \cdots, c_k^{(n_c)})\)</span>.</p>
+<p>On aura donc finalement</p>
+<div class="math notranslate nohighlight">
+\[p({ \bf y_k} | {\bf c_k})=\prod_{n=1}^{n_c}{p(y_k^{(n)}|c_k^{(n)})}.\]</div>
+<p>En posant <span class="math notranslate nohighlight">\(\lambda_k({\bf c_k})=-log{(p({ \bf y_k} | {\bf c_k}))}\)</span>, toujours positif, il vient</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \min_{{\bf c}}{\sum_{k=1}^L{\lambda_k({\bf c_k})}} 
+\end{aligned}\]</div>
+</section>
+<section id="algorithme-de-viterbi">
+<h2><span class="section-number">3.3.2. </span>Algorithme de Viterbi<a class="headerlink" href="#algorithme-de-viterbi" title="Permalink to this headline">#</a></h2>
+<p>L’estimation de la séquence la plus vraisemblable sera réalisée efficacement à l’aide de l’algorithme de Viterbi, premier à proposer cette solution. L’idée originale de Viterbi est d’utiliser le treillis associé au code convolutif pour énumérer efficacement l’ensemble des chemins possibles. En utilisant, le treillis, cet algorithme permet à
+chaque section de treillis de ne garder que les <span class="math notranslate nohighlight">\(|\mathcal{S}|\)</span> chemins les plus vraisemblables terminant dans chaque état. Rappelons que, de par la représentation d’état, on a <span class="math notranslate nohighlight">\({\bf c_k(s_{k-1},s_k)}\)</span>, ie. les labels des bits codés émis <span class="math notranslate nohighlight">\({\bf c_k}\)</span> qui sont une fonction déterministe de l’état de départ <span class="math notranslate nohighlight">\(s_{k-1}\)</span> et l’état d’arrivée <span class="math notranslate nohighlight">\(s_k\)</span>. On
+a alors les propriétés suivantes :</p>
+<div class="proof property admonition" id="property-0">
+<p class="admonition-title"><span class="caption-number">Property 3.2 </span></p>
+<section class="property-content" id="proof-content">
+<ol class="simple">
+<li><p>Correspondance entre espace des séquences et des états</p></li>
+<li><p>Chaque chemin sur le treillis représente une séquence de bits codés
+émis possibles :</p></li>
+</ol>
+</section>
+</div><p>En effet, en utilisant le fait que</p>
+<div class="math notranslate nohighlight">
+\[\left \{ c[n] | n=1 \cdots N \right\} \Longleftrightarrow \left \{ {\bf c_k} | k=1 \cdots L \right\}\]</div>
+<p>un simple jeu de réécriture permet d’avoir</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \min_{{\bf c}}{\sum_{k=1}^L{\lambda_k({\bf c_k})}}  \nonumber \\
+&amp;   \hspace{2cm} {\huge \Updownarrow}\\
+\hat{{\bf c}}&amp;= \mathrm{arg} \min_{s_k}{\sum_{k=1}^L{\lambda_k({\bf c_k}(s_{k-1},s_k))}} \nonumber\\
+&amp;=\mathrm{arg} \min_{s_k}{\sum_{k=1}^L{\lambda_k(s_{k-1},s_k)}} 
+\end{aligned}\end{split}\]</div>
+<p>Pour la section de treillis <span class="math notranslate nohighlight">\(n\)</span>, à l’état <span class="math notranslate nohighlight">\(s_n=s\)</span>, on peut alors écrire</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Lambda_n(s_n) &amp;=  \underset{\lbrace s_0, s_1, \cdots, s_{n-1}, s_n \rbrace}{\operatorname{min}}{\sum_{k=0}^{n}{\lambda_k(s_{k-1},s_k)}} \nonumber \\
+&amp; =\underset{\lbrace s_{n-1} \rightarrow s_n \rbrace}{\operatorname{min}} \left\{  \left\{ \underset{\lbrace s_0, \cdots, s_{n-1}\rbrace}{\operatorname{min}} {\sum_{k=0}^{n-1}{\lambda_k(s_{k-1},s_k)}} \right\} + \lambda_n(s_{n-1},s_n) \right\} \nonumber \\
+&amp; =\underset{\underbrace{\left\{s_{n-1} \rightarrow s_n \right\}}_{\mbox{transitions possibles}}}{\operatorname{min}} \left\{ \Lambda_{n-1}{(s_{n-1})} + \lambda_n(s_{n-1},s_n) \right\}
+\end{aligned}\end{split}\]</div>
+<p>La procédure complète est alors donnée par</p>
+<div class="proof algorithm admonition" id="algorithm-1">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.1 </span> (Algorithme de Viterbi)</p>
+<section class="algorithm-content" id="proof-content">
+<ul>
+<li><p>Pour chaque section <span class="math notranslate nohighlight">\(n\)</span> (<span class="math notranslate nohighlight">\(n=1 \cdots N\)</span>), pour chaque état <span class="math notranslate nohighlight">\(s_n=s\)</span> (<span class="math notranslate nohighlight">\(s=0 \cdots |\mathcal{S}|\)</span>) :</p>
+<ol>
+<li><p>calculer <span class="math notranslate nohighlight">\(\Lambda_n\)</span> tel que</p>
+<div class="math notranslate nohighlight">
+\[\Lambda_n{(s_{n})}=\underset{\left\{s_{n-1} \rightarrow s_n \right\}}{\operatorname{min}} \left\{ \Lambda_{n-1}{(s_{n-1})} + \lambda_n(s_{n-1},s_n) \right \}\]</div>
+</li>
+<li><p>stocker l’état précédent <span class="math notranslate nohighlight">\(s_{n-1}\)</span> : pour chaque état <span class="math notranslate nohighlight">\(s_n\)</span>, on peut donc associer une séquence <em>survivante</em> <span class="math notranslate nohighlight">\(\left\{s_0, \cdots, s_n \right\}\)</span> de métrique cumulée associée <span class="math notranslate nohighlight">\(\Lambda_n{(s_{n})}\)</span>)</p></li>
+</ol>
+</li>
+<li><p>A la fin du treillis, il ne reste plus que <span class="math notranslate nohighlight">\(|\mathcal{S}|\)</span> chemins possibles, alors par parcours arrière (<em>traceback</em>) des états du treillis</p>
+<div class="math notranslate nohighlight">
+\[\hat{{\bf s}}= \left\{s_0, s_1, \cdots, s_{L-1}, s_L | \underset{s_L}{\operatorname{argmin}}\left\{\Lambda_{L}(s_L) \right\} \right\}\]</div>
+<p>ce qui équivaut compte tenu que</p>
+<div class="math notranslate nohighlight">
+\[\hat{{\bf s}}=\left\{s_0, s_1, \cdots, s_{L-1}, s_K \right\} \leftrightarrow \hat{{\bf u}}=\left\{u_1, s_2, \cdots, u_{K-1}, u_K \right\}\]</div>
+<p>à sélectionner la séquence d’information la plus probable (Hard Output, HO) en utilisant <span class="math notranslate nohighlight">\((s_{n-1},s_n) \rightarrow u_n\)</span>.</p>
+</li>
+</ul>
+</section>
+</div><p>Si le treillis est fermé lors de l’étape de codage (retour à zéro), le dernier état est donné systématiquement par <span class="math notranslate nohighlight">\(\Lambda_{L}(s_0)\)</span>.</p>
+<section id="cas-du-decodage-a-entrees-dures-hard-inputs-hi">
+<h3><span class="section-number">3.3.2.1. </span>Cas du décodage à entrées dures (Hard Inputs (HI))<a class="headerlink" href="#cas-du-decodage-a-entrees-dures-hard-inputs-hi" title="Permalink to this headline">#</a></h3>
+<p>Le modèle de canal est alors donné par</p>
+<div class="math notranslate nohighlight">
+\[y_n=c_n \oplus e_n, \forall n=1,\cdots, N.\]</div>
+<p>Dans le cadre d’un décodage dure, on a alors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\lambda_k(s_{k-1},s_k)&amp;=d_H({\bf y_k},{\bf c_k}) \nonumber \\
+&amp;=\sum_{m=1}^{n_c}{d_H(y_k^{(m)},c_k^{(m)})} \nonumber \\
+&amp;=\sum_{m=1}^{n_c}{y_k^{(m)} \oplus c_k^{(m)}}
+\end{aligned}\end{split}\]</div>
+<p>Le mot de code sélectionné sera donc bien le mot de distance de Hamming cumulée la plus faible.</p>
+</section>
+<section id="cas-du-decodage-a-entrees-souples">
+<h3><span class="section-number">3.3.2.2. </span>Cas du décodage à entrées “souples”<a class="headerlink" href="#cas-du-decodage-a-entrees-souples" title="Permalink to this headline">#</a></h3>
+<p>Le modèle de canal est alors donné par</p>
+<div class="math notranslate nohighlight">
+\[y_n=c_n + b_n, \;\;  \forall n=1,\cdots, N.\]</div>
+<p>où <span class="math notranslate nohighlight">\(b_n \sim \mathcal{N}(0,\sigma^2_b).\)</span></p>
+<p>et donc</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+p(y_n|c_n) &amp; \propto  e^{-\frac{(y_n-c_n)^2}{2 \sigma_b^2}} \nonumber
+\end{aligned}\]</div>
+<p>Dans le cadre d’un décodage souple, après calcul direct, on a alors</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\lambda_k(s_{k-1},s_k)&amp;= d_E({\bf y_k},{\bf c_k}) \nonumber \\
+&amp;=\sum_{m=1}^{n_c}{|y_k^{(m)}-c_k^{(m)}|^2}
+\end{aligned}\end{split}\]</div>
+<p>Le mot de code sélectionné sera donc bien le mot de distance euclidienne cumulée la plus faible.</p>
+<p>On peut encore simplifié le problème en développant les termes <span class="math notranslate nohighlight">\(|.|^2\)</span>, en supprimant les termes constants et/ou communs à chaque métrique de
+branche de la section courante du trellis, on obtient une nouvelle métrique:</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\tilde{\lambda}_k(s_{k-1},s_k)&amp;=-\sum_{m=1}^{n_c}{y_k^{(m)}c_k^{(m)}}
+\end{aligned}\]</div>
+<p>On définit alors finalement par</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\Gamma_k(s_{k-1},s_k)&amp;=\sum_{m=1}^{n_c}{y_k^{(m)}c_k^{(m)}}
+\end{aligned}\]</div>
+<p>la métrique de branche comme étant la corrélation déterministe partielle entre la séquence observée et le mot de codes émis. Comme on a changé le signe de cette métrique, il convient alors de remplacer l’opération de <span class="math notranslate nohighlight">\(\min\)</span> par <span class="math notranslate nohighlight">\(\max\)</span> dans l’algorithme de Viterbi présenté. On interprète alors cela comme une maximisation de l’intercorrélation entre le mot émis et la séquence observée.</p>
+</section>
+<section id="cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-sur-canal-gaussien">
+<h3><span class="section-number">3.3.2.3. </span>Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation <span class="math notranslate nohighlight">\(M\)</span>-aire sur canal Gaussien.<a class="headerlink" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-sur-canal-gaussien" title="Permalink to this headline">#</a></h3>
+<p>On s’intéresse maintenant au cas où le mot émis est mappé sur une constellation d’ordre élevée. Pour commencer, on considère que l’on a un ordre de constellation <span class="math notranslate nohighlight">\(M=2^{n_c}\)</span>, ie. chaque label <span class="math notranslate nohighlight">\({\bf c_k}\)</span> est <strong>directement</strong> mappé sur un symbole de la constellation. On note <span class="math notranslate nohighlight">\(x_k=\mathcal{M}({\bf c_k})\)</span> où <span class="math notranslate nohighlight">\(\mathcal{M}(.)\)</span> est l’opérateur de mapping.</p>
+<p>Le modèle de canal est alors donné par</p>
+<div class="math notranslate nohighlight">
+\[y_n= x_n + b_n, \;\;  \forall n=1,\cdots, L\]</div>
+<p>où <span class="math notranslate nohighlight">\(b_n\)</span> est un bruit blanc Gaussien complexe circulaire suivant une loi <span class="math notranslate nohighlight">\(\mathcal{CN}(0, \sigma_b^2)\)</span>, ie. <span class="math notranslate nohighlight">\(b_n= b_{I,n}+i b_{Q,n}\)</span> où <span class="math notranslate nohighlight">\(b_{I,n}\)</span> et <span class="math notranslate nohighlight">\(b_{Q,n}\)</span> suivent une loi normale réelle <span class="math notranslate nohighlight">\(\mathcal{N}(0,\sigma_b^2/2)\)</span>. On a donc</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+p(y_n|x_n) &amp; =  p(b_n) \nonumber\\
+&amp; =  p(b_{I,n},b_{Q,n}) \nonumber\\
+&amp;\propto  e^{-\frac{|y_n-x_n|^2}{\sigma_b^2}}
+\end{aligned}\end{split}\]</div>
+<p>Le décodage ML s’écrit comme précédemment</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\hat{{\bf c}}&amp;=\mathrm{arg} \max_{{\bf c}}{p({\bf y} | {\bf  c})} \nonumber \\
+&amp;=  \mathrm{arg} \max_{{\bf c}}{\prod_n{p(y_n | {c_n})}} \\
+&amp;=  \mathrm{arg} \max_{{\bf x}}{\prod_n{p(y_n | {x_n})}}
+\end{aligned}\end{split}\]</div>
+<p>Comparé au cas binaire précédent, on a directement accès à <span class="math notranslate nohighlight">\(p(y_n | {x_n}), \forall n\)</span>. Dans ce cas la métrique de branche se simplifie comme suit</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\lambda_k(s_{k-1},s_k)&amp;=d_E(y_k, x_k) \nonumber \\
+&amp;=|y_k-x_k|^2
+\end{aligned}\end{split}\]</div>
+<p>On retrouve là encore le fait que la séquence retenue au final sera la séquence la plus proche de la séquence reçue. On peut également simplifier le décodage en considérant la métrique</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\tilde{\lambda}_k(s_{k-1},s_k)&amp;=&amp;-2\text{Re}{\lbrace y_k x^*_k\rbrace} + |x_k|^2
+\end{aligned}\]</div>
+<p>Ceci s’interprète comme une corrélation “corrigée” par la puissance du symbole considéré.</p>
+<p>Si la modulation est à module constant, on pourra simplifier en</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\Gamma_k(s_{k-1},s_k) &amp; =  2\text{Re}{\lbrace y_k x^*_k \rbrace}
+\end{aligned}\]</div>
+<p>Dans ce cas, on revient à une maximisation de corrélation entre séquence de symboles reçus et séquence de symboles émis.</p>
+</section>
+<section id="cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-a-bits-entrelaces-sur-canal-gaussien">
+<h3><span class="section-number">3.3.2.4. </span>Cas du décodage à entrées “souples” (Soft Inputs (SI)), modulation <span class="math notranslate nohighlight">\(M\)</span>-aire à bits entrelacés sur canal Gaussien<a class="headerlink" href="#cas-du-decodage-a-entrees-souples-soft-inputs-si-modulation-m-aire-a-bits-entrelaces-sur-canal-gaussien" title="Permalink to this headline">#</a></h3>
+<p>Pour simplifier la complexité induite par l’utilisation d’un code adapté à l’ordre de modulation (modulation codées en treillis dont le cas
+précédent est un cas trivial), on considère un schéma pour lequel on place un entrelaceur entre le code et la modulation. Le mot de code
+<span class="math notranslate nohighlight">\({\bf c}=[c_1, \cdots, c_N]\)</span> est entrelacé par l’entrelaceur <span class="math notranslate nohighlight">\(\Pi\)</span>. On obtient alors une séquence de symboles <span class="math notranslate nohighlight">\({\bf x=[x_1, \cdots,x_{N_s}]}\)</span>
+obtenus en regroupant les bits codés entrelacés en groupes de <span class="math notranslate nohighlight">\(m\)</span> bits tels que <span class="math notranslate nohighlight">\({\bf x_n}=[x_n^1,\cdots, x_n^m]\)</span>. <span class="math notranslate nohighlight">\([x_n^1,\cdots, x_n^m]\)</span>
+définit l’étiquette binaire pour le mapping sur le symbole <span class="math notranslate nohighlight">\({\bf s_n}=\mathcal{M}({\bf x_n}) \in \mathbb{C}\)</span>. L’entrelaceur <span class="math notranslate nohighlight">\(\Pi\)</span>
+définit une relation bijective</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\pi : \left[1, \cdots, N\right]&amp; \mapsto &amp; \left[1, \cdots N_s \right] \times  \left[1, \cdots m \right] \nonumber \\
+k &amp; &amp;(k',i)
+\end{aligned}\end{split}\]</div>
+<p>entre le bit codé <span class="math notranslate nohighlight">\(c_k \in \lbrace 0,1 \rbrace\)</span> et le <span class="math notranslate nohighlight">\(i\)</span>-ème bit <span class="math notranslate nohighlight">\(x_{k'}^i\)</span> du symbole <span class="math notranslate nohighlight">\(M\)</span>-aire <span class="math notranslate nohighlight">\({\bf x_{k'}}\)</span>. On a <span class="math notranslate nohighlight">\(N_s=N/m\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{M}: x \rightarrow s\]</div>
+<p>définit la fonction bijective de mapping. Au niveau du récepteur, un décodage conjoint code-modulation n’est plus possible. On réalise alors une démodulation souple qui va
+estimer de manière souple les bits du mots de codes. Cette information souple est donnée sous la forme d’une log-vraisemblance ou d’un log-rapport de vraisemblance (LLR). La quantité obtenue traduit le fait que l’on a transformé un canal vectoriel <span class="math notranslate nohighlight">\(M\)</span>-aire en <span class="math notranslate nohighlight">\(m\)</span> canaux binaires équivalents dont les caractéristiques moyennes dépendent de la
+modulation et du mapping utilisés. La définition suivante donne les quantités <em><strong>souples</strong></em> que l’on peut estimer sur les bits codés émis.</p>
+<p>On suppose la transmission de symboles <span class="math notranslate nohighlight">\(M\)</span>-aire sur canal Gaussien avec <span class="math notranslate nohighlight">\(M=2^m\)</span>. Les vecteurs binaires <span class="math notranslate nohighlight">\(x[n]=[x^1[n], \cdots, x^m[n]] \in \mathcal{X}=\{0,1\}^m\)</span> sont “mappés”
+sur des symboles <span class="math notranslate nohighlight">\(s[n] \in \mathcal{S} \subset \mathbb{C}\)</span>. On suppose que les symboles <span class="math notranslate nohighlight">\(x[n]\)</span> (et donc <span class="math notranslate nohighlight">\(s[n]\)</span>) sont équi-distribués. Les symboles observés sont donnés par <span class="math notranslate nohighlight">\({\bf y=[y_1, \cdots, y_{N_s}]}\)</span>. On supposera le canal sans mémoire. On peut définir alors deux quantités relatives à une décision <em>souple</em> :</p>
+<ol>
+<li><p><em><strong>log-vraisemblance/métrique bit ML :</strong></em></p>
+<div class="math notranslate nohighlight">
+\[\lambda^i(y_{k'},b)=\log{\sum_{{\bf x} \in \mathcal{X}_b^i}} { p({\bf y_{k'}}| {\bf x})}, \; \forall i=1, \cdots, m.\]</div>
+<p><span class="math notranslate nohighlight">\(\mathcal{X}_b^i\)</span> est le sous-ensemble des symboles <span class="math notranslate nohighlight">\({\bf x} \in \mathcal{X}\)</span> ayant <span class="math notranslate nohighlight">\(x_i[n]=b \in \lbrace 0,1 \rbrace\)</span> dans leur étiquette binaire associée.</p>
+</li>
+<li><p><em><strong>LLR associé au bit <span class="math notranslate nohighlight">\(x_i[n]\)</span></strong></em>:</p></li>
+</ol>
+<p>L’expression <span class="math notranslate nohighlight">\(\lambda^i(y_{k'},b)\)</span> est en fait dérivée de la vraisemblance de l’obersvation <span class="math notranslate nohighlight">\({\bf y_{k'}}\)</span> sachant le bit de label <span class="math notranslate nohighlight">\(x_{k'}^i\)</span>. Ainsi on a</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+p({\bf y_{k'}}|x^i=b)&amp;=\sum_{{\bf x} \in \mathcal{X}} { p({\bf y_{k'}}| {\bf x})p({\bf x}|x^i=b)} \nonumber \\
+%
+&amp;= \frac{1}{2^{m-1}}\sum_{{\bf x} \in \mathcal{X}_b^i} { p({\bf y_{k'}}| {\bf x})}
+\end{aligned}$$ en notant que
+$$p({\bf x})|x^i=b)=\left\lbrace\begin{array}{ll}
+2^{-(m-1)} &amp;, \; \mathrm{si} \; x^i= b \\
+0 &amp;,\; \mathrm{sinon}
+\end{array} \right.\end{split}\]</div>
+<p>En passant au <span class="math notranslate nohighlight">\(\log\)</span> et en ne gardant pas le terme constant, on obtient la métrique voulue.</p>
+<p>Le décodage ML du mot de code émis est alors réalisé à partir des métriques bit supposées indépendfantes après entrelacement supposé
+parfait. La règle de décision est alors donnée par</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \max_{{\bf c}}{\sum_{n=1}^N{\lambda^i({\bf y_{k'}},c_n)}}
+ \end{aligned}\]</div>
+<p>Pour un code convolutif, si on considère un décodage par Viterbi sur le treillis cela revient à considérer le probleme suivant</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\hat{{\bf c}}&amp;= \mathrm{arg} \max_{{\bf c}}{\sum_{k=1}^L {\lambda_k(s_{k-1},s_k)}}
+\end{aligned}\]</div>
+<p>où, avec quelques abus de notation, la métrique de branche s’exprime comme</p>
+<div class="math notranslate nohighlight">
+\[\lambda_k(s_{k_1},s_k)=\sum_{l=1}^{n_c}{\lambda^i(y_{k'},c_k^{l})}\]</div>
+<p>où <span class="math notranslate nohighlight">\({\lambda^i(y_{k'},c_k^{l})}\)</span> représente la log-vraisemblance associée au bit codé <span class="math notranslate nohighlight">\(c_k^{l}\)</span> quand on redéfinit l’entrelacement comme étant la fonction</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\pi:  \left[1, \cdots , L \right] \times \left[ 1, \cdots , n_c \right]  &amp; \mapsto &amp; \left[ 1, \cdots, N_s \right] \times \left[ 1,\cdots, m \right] \nonumber \\
+(k,l) &amp;  &amp; (k',i) \nonumber
+\end{aligned}\end{split}\]</div>
+<p>où <span class="math notranslate nohighlight">\(N_s\)</span> est le nombre de symboles modulés codés émis sur le canal (<span class="math notranslate nohighlight">\(N_s=(L . n_c)/m\)</span>)</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch3sec2.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">3.2. </span>Représentations</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ch3sec4.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3.4. </span>Décodage MAP symbole</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By C. Poulliat<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
